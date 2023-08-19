@@ -8,7 +8,14 @@
 UAIBase_PawnSensingComponent::UAIBase_PawnSensingComponent()
 {
 
-	
+	// Currently not intrested in player pawns 
+	bOnlySensePlayers = false;
+
+	// Sensing food pawns
+	bSeePawns = true;
+
+
+	// IsSenseActor()
 }
 
 void UAIBase_PawnSensingComponent::BeginPlay()

@@ -18,7 +18,7 @@ class PERCEPTION_API UAIBase_PawnSensingComponent : public UPawnSensingComponent
 	UAIBase_PawnSensingComponent();
 
 	virtual void BeginPlay() override;
-	/*UPROPERTY()
-	TObjectPtr<AAIBase> AIBody;*/
+
+	
 	
 };
