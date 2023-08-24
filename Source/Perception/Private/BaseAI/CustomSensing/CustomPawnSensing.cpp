@@ -2,12 +2,12 @@
 
 #include "DrawDebugHelpers.h"    
 #include "Kismet/GameplayStatics.h"
-#include "BaseAI/CustomSensing/CustomPawnSensing.h"
-
 #include "BaseAI/AIBase.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Perception/PerceptionCharacter.h"
 #include "PhysicsEngine/ShapeElem.h"
+#include "BaseAI/CustomSensing/CustomPawnSensing.h"
+
 
 // Sets default values for this component's properties
 UCustomPawnSensing::UCustomPawnSensing()
@@ -17,7 +17,7 @@ UCustomPawnSensing::UCustomPawnSensing()
 	PrimaryComponentTick.bCanEverTick = true;
 	
 	SphereBody = CreateDefaultSubobject<USphereComponent>("SphereBody");
-	SphereBody->SetupAttachment(GetAttachParent());
+	//SphereBody->SetupAttachment(this);
 	
 }
 
