@@ -6,7 +6,9 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BaseAI\AIBase_PawnSensingComponent.h"
 #include "GameFramework/Character.h"
+#include "BaseAI/CustomSensing/CustomPawnSensing.h"
 #include "AIBase.generated.h"
+
 
 UCLASS()
 class PERCEPTION_API AAIBase : public ACharacter
@@ -17,10 +19,21 @@ public:
 	// Sets default values for this character's properties
 	AAIBase();
 
+	/*
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Perception, meta=(AllowPrivateAccess=true))
 	class UAIBase_PawnSensingComponent* PawnSensingComponent;
+	*/
 
-	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Body")
+	UStaticMeshComponent* Body;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Head")
+	UStaticMeshComponent* Head;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sensing")
+	UCustomPawnSensing* PawnSensing;
+
+
 	
 protected:
 	// Called when the game starts or when spawned

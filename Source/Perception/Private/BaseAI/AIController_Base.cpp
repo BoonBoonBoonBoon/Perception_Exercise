@@ -4,6 +4,7 @@
 #include "BaseAI/AIController_Base.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "BaseAI/CustomSensing/CustomPawnSensing.h"
 #include "Perception\Public\BaseAI\AIBase.h"
 
 AAIController_Base::AAIController_Base(FObjectInitializer const& ObjectInitializer)
@@ -12,7 +13,7 @@ AAIController_Base::AAIController_Base(FObjectInitializer const& ObjectInitializ
 	BehaviorTreeComponent = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTreeComponent"));
 	BlackboardComponent = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
 
-	Perception = CreateDefaultSubobject<UAIBase_PawnSensingComponent>(TEXT("Sensing"));
+	//Perception = CreateDefaultSubobject<UAIBase_PawnSensingComponent>(TEXT("Sensing"));
 }
 
 void AAIController_Base::BeginPlay()
