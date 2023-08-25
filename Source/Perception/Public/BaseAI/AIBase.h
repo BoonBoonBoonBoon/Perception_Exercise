@@ -18,12 +18,7 @@ class PERCEPTION_API AAIBase : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AAIBase();
-
-	/*
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Perception, meta=(AllowPrivateAccess=true))
-	class UAIBase_PawnSensingComponent* PawnSensingComponent;
-	*/
-
+	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Body")
 	UStaticMeshComponent* Body;
 
@@ -33,6 +28,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sensing")
 	UCustomPawnSensing* PawnSensing;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="DetectionBody")
+	USphereComponent*DetectionBody;
+
+
+	void OnBeginOverlap(UPrimitiveComponent* OverlapComponent, 
+	AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
+	bool bFromSweep, const FHitResult& SweepResult);
 
 	
 protected:
@@ -47,6 +49,5 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	
 };

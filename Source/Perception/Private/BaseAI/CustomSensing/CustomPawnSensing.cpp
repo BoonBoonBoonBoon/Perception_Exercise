@@ -1,12 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "BaseAI/CustomSensing/CustomPawnSensing.h"
 #include "DrawDebugHelpers.h"    
 #include "Kismet/GameplayStatics.h"
 #include "BaseAI/AIBase.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Perception/PerceptionCharacter.h"
 #include "PhysicsEngine/ShapeElem.h"
-#include "BaseAI/CustomSensing/CustomPawnSensing.h"
+
 
 
 // Sets default values for this component's properties
@@ -16,14 +17,17 @@ UCustomPawnSensing::UCustomPawnSensing()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	
-	SphereBody = CreateDefaultSubobject<USphereComponent>("SphereBody");
+	//SphereBody = CreateDefaultSubobject<USphereComponent>("SphereBody");
 	//SphereBody->SetupAttachment(this);
+
+	/*USphereComponent* Sphere;
+	AAIBase* Ref;*/
 	
 }
 
 
 
-void UCustomPawnSensing::SensingRadius()
+void UCustomPawnSensing::SensingRadius(USphereComponent* Body, AActor* Actor)
 {
 	const UWorld* World = GetWorld();
 	if(World)
@@ -32,8 +36,13 @@ void UCustomPawnSensing::SensingRadius()
 		DrawDebugSphere(GetWorld(), SphereMatrix, 800.f, 12, FColor::Blue, false
 			, 0.001, 0, 1.f);
 
+		if(Cast<USphereComponent>(Body))
+		{
+			
+		}
 		
-	//APerceptionCharacter* PerceptionCharacter = Cast<UCustomPawnSensing>();
+
+		
 	}
 		/*const FCollisionParameters ColParam;
 		const FHitResult FHit
@@ -58,7 +67,7 @@ void UCustomPawnSensing::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	SensingRadius();
+	SensingRadius(NULL, NULL);
 	//SensingPeripherial();
 
 

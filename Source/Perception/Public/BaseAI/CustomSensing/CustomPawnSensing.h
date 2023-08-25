@@ -21,7 +21,7 @@ public:
 	
 	
 	void SensingPeripherial();
-	void SensingRadius();
+	void SensingRadius(USphereComponent* Body, AActor* Actor);
 
 
 protected:
