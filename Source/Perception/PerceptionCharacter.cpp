@@ -9,6 +9,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "BaseAI/AIBase.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -49,6 +50,27 @@ APerceptionCharacter::APerceptionCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	Collision = CreateDefaultSubobject<USphereComponent>("Collision");
+	Collision->SetupAttachment(RootComponent);
+
+	
+}
+
+void APerceptionCharacter::OnBeginOverlap(UPrimitiveComponent* OverlapComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor)
+	{
+		AAIBase* Ref = Cast<AAIBase>(OtherActor);
+		if(Ref)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Hit"));
+		}
+	}
+
+
+	
 }
 
 void APerceptionCharacter::BeginPlay()
@@ -64,6 +86,13 @@ void APerceptionCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+}
+
+void APerceptionCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	Collision->OnComponentBeginOverlap.AddDynamic(this, &APerceptionCharacter::OnBeginOverlap);
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "Components/SphereComponent.h"
 #include "PerceptionCharacter.generated.h"
 
 
@@ -37,12 +38,19 @@ class APerceptionCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere)
+	USphereComponent* Collision;
 public:
 	APerceptionCharacter();
 	
 
 protected:
 
+	void OnBeginOverlap(UPrimitiveComponent* OverlapComponent, 
+	AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
+	bool bFromSweep, const FHitResult& SweepResult);
+
+	
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
 
@@ -56,6 +64,8 @@ protected:
 	
 	// To add mapping context
 	virtual void BeginPlay();
+
+	virtual void Tick(float DeltaSeconds) override;
 
 public:
 	/** Returns CameraBoom subobject **/
