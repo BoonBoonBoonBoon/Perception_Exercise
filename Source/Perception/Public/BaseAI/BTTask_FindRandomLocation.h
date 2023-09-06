@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AIController_Base.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
 #include "BTTask_FindRandomLocation.generated.h"
 
@@ -16,6 +17,9 @@ class PERCEPTION_API UBTTask_FindRandomLocation : public UBTTask_BlackboardBase
 
 public:
 
+	UPROPERTY()
+	AAIController_Base* Controller;
+	
 	// Execute task function
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	

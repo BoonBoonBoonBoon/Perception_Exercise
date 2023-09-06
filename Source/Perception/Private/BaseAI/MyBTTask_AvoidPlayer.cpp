@@ -6,6 +6,7 @@
 #include "AIController.h"
 #include "NavigationSystem.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Perception/PerceptionCharacter.h"
 
 EBTNodeResult::Type UMyBTTask_AvoidPlayer::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
@@ -16,9 +17,9 @@ EBTNodeResult::Type UMyBTTask_AvoidPlayer::ExecuteTask(UBehaviorTreeComponent& O
 	AAIController* AiController = OwnerComp.GetAIOwner();
 	const APawn* AIPawn = AiController->GetPawn();
 	const FVector Origin = AIPawn->GetActorLocation();
-
-	//
+	
 	const UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
+	
 	if(IsValid(NavSystem) && NavSystem->GetRandomPointInNavigableRadius(Origin, AvoidDistance, Location))
 	{
 		AiController->GetBlackboardComponent()->SetValueAsVector(BlackboardKey.SelectedKeyName, Location.Location);
@@ -35,6 +36,6 @@ FString UMyBTTask_AvoidPlayer::GetStaticDescription() const
 UMyBTTask_AvoidPlayer::UMyBTTask_AvoidPlayer()
 {
 	NodeName = "Avoid Player";
-	
+	BlackboardKey.AddVectorFilter(this, GET_MEMBER_NAME_CHECKED(UMyBTTask_AvoidPlayer, BlackboardKey));
 	
 }
