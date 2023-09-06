@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BehaviorTree.h"
-#include "BaseAI\AIBase_PawnSensingComponent.h"
+
 #include "GameFramework/Character.h"
-#include "BaseAI/CustomSensing/CustomPawnSensing.h"
+//#include "BaseAI\AIBase_PawnSensingComponent.h"
+//#include "BaseAI/CustomSensing/CustomPawnSensing.h"
 #include "AIBase.generated.h"
 
 
@@ -25,13 +26,14 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Head")
 	UStaticMeshComponent* Head;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sensing")
-	UCustomPawnSensing* PawnSensing;
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sensing")
+	UCustomPawnSensing* PawnSensing;*/
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="DetectionBody")
-	USphereComponent*DetectionBody;
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="DetectionBody")
+	USphereComponent*DetectionBody;*/
 
-
+	// Delegates need UFunction
+	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlapComponent, 
 	AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
 	bool bFromSweep, const FHitResult& SweepResult);

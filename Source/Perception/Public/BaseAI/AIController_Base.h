@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AIBase_PawnSensingComponent.h"
+#include "BaseAI/Perception/BasicPerceptionComponent.h"
 #include "AIController.h"
+#include "Perception/AIPerceptionTypes.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "AIController_Base.generated.h"
 
@@ -19,6 +20,24 @@ public:
 
 	explicit AAIController_Base(FObjectInitializer const& ObjectInitializer);
 
+	
+	// Configuration for senses under perception class 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Sight Config")
+	UAISenseConfig_Sight* SightConfig;
+
+	/*UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Hearing Perception")
+	UAISenseConfig_Hearing* HearingConfig;*/
+
+	void SetupPerceptionSystem();
+
+	UFUNCTION()
+	void OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus);
+	
+	/*UPROPERTY(EditDefaultsOnly, Instanced, Category="AI Perception")
+	TArray<UAISenseConfig*> SensesConfigArray;*/
+
+
+	
 protected:
 	virtual void BeginPlay() override;
 	// When Ai is Possessed  
@@ -35,6 +54,6 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI", meta = (AllowPrivateAccess = true))
 	UBlackboardComponent* BlackboardComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Sensing", meta=(AllowPrivateAccess=true))
-	TObjectPtr<UAIBase_PawnSensingComponent> Perception;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Perception", meta=(AllowPrivateAccess=true))
+	TObjectPtr<UBasicPerceptionComponent> Perception;
 };

@@ -42,8 +42,14 @@ class APerceptionCharacter : public ACharacter
 	USphereComponent* Collision;
 public:
 	APerceptionCharacter();
-	
 
+	class UAIPerceptionStimuliSourceComponent* StimuliSource;
+	void SetupStimulusSource();
+
+	void MoveForward(float value);
+	void MoveSide(float Value);
+
+	
 protected:
 
 	void OnBeginOverlap(UPrimitiveComponent* OverlapComponent, 

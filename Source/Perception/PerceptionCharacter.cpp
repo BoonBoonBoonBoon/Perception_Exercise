@@ -10,6 +10,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "BaseAI/AIBase.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISense_Hearing.h"
+#include "Perception/AISense_Sight.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -57,8 +60,35 @@ APerceptionCharacter::APerceptionCharacter()
 	
 }
 
+void APerceptionCharacter::SetupStimulusSource()
+{
+	StimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("Stimulus Source"));
+	if(StimuliSource)
+	{
+		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
+		//StimuliSource->RegisterForSense(TSubclassOf<UAISense_Hearing>());
+		StimuliSource->RegisterWithPerceptionSystem();
+	}
+}
+
+void APerceptionCharacter::MoveForward(float value)
+{
+	if (value != 0)
+	{
+		AddMovementInput(GetActorForwardVector(), value);
+	}
+}
+
+void APerceptionCharacter::MoveSide(float Value)
+{
+	if(Value != 0)
+	{
+		AddMovementInput(GetActorRightVector(), Value);
+	}
+}
+
 void APerceptionCharacter::OnBeginOverlap(UPrimitiveComponent* OverlapComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                          UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherActor)
 	{
@@ -114,6 +144,15 @@ void APerceptionCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APerceptionCharacter::Look);
 
 	}
+
+	/*
+	PlayerInputComponent->BindAxis("MoveForward", this, &APerceptionCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("MoveSide", this, &APerceptionCharacter::MoveSide);
+	
+	// Mouse Input
+	PlayerInputComponent->BindAxis("Look Down / Look Up", this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis("Look RIght / Look Left", this, &APawn::AddControllerYawInput);
+	*/
 
 }
 
