@@ -20,10 +20,11 @@ EBTNodeResult::Type UMyBTTask_AvoidPlayer::ExecuteTask(UBehaviorTreeComponent& O
 	
 	const UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
 	
-	if(IsValid(NavSystem) && NavSystem->GetRandomPointInNavigableRadius(Origin, AvoidDistance, Location))
+	
+	/*if(IsValid(NavSystem) && NavSystem->GetRandomPointInNavigableRadius(Origin, AvoidDistance, Location))
 	{
 		AiController->GetBlackboardComponent()->SetValueAsVector(BlackboardKey.SelectedKeyName, Location.Location);
-	}
+	}*/
 	
 	return Super::ExecuteTask(OwnerComp, NodeMemory);
 }

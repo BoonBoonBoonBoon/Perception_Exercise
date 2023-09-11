@@ -43,6 +43,7 @@ protected:
 	// When Ai is Possessed  
 	virtual void OnPossess(APawn* InPawn) override;
 
+	
 private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = true))
