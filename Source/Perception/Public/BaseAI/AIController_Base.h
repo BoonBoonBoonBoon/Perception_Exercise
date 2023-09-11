@@ -32,14 +32,11 @@ public:
 
 	UFUNCTION()
 	void OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus);
-	
-	/*UPROPERTY(EditDefaultsOnly, Instanced, Category="AI Perception")
-	TArray<UAISenseConfig*> SensesConfigArray;*/
 
 
-	
 protected:
 	virtual void BeginPlay() override;
+	
 	// When Ai is Possessed  
 	virtual void OnPossess(APawn* InPawn) override;
 
@@ -55,6 +52,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI", meta = (AllowPrivateAccess = true))
 	UBlackboardComponent* BlackboardComponent;
 
+	UPROPERTY(EditAnywhere)
+	UAIPerceptionComponent* PerceptionComp;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Perception", meta=(AllowPrivateAccess=true))
 	TObjectPtr<UBasicPerceptionComponent> Perception;
 };

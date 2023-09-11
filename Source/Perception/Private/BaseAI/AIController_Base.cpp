@@ -65,6 +65,27 @@ void AAIController_Base::OnTargetDetected(AActor* Actor, FAIStimulus const Stimu
 	
 }
 
+/*void AAIController_Base::OnPerceptionUpdated(TArray<AActor*> UpdatedActors)
+{
+	//if the actor exists inside the updatedActors array register him
+	// : https://discuss.codecademy.com/t/the-meaning-of-colon-in-c/674663
+	// moves through each actor like a normal loop 
+	for (AActor* Actor : UpdatedActors)
+	{
+		if(Actor->IsA<APerceptionCharacter>() && !GetSeeingPawn())
+		{
+			BlackboardComponent->SetValueAsObject(BlackboardEnemyKey, Actor);
+			return;
+		}
+	}
+	// The Character doesnt exist in the updated actors make it so
+	BlackboardComponent->SetValueAsObject(BlackboardEnemyKey, nullptr)
+}*/
+
+/*AActor* AAIController_Base::GetSeeingPawn()
+{
+}*/
+
 void AAIController_Base::BeginPlay()
 {
 	Super::BeginPlay();
