@@ -30,7 +30,10 @@ public:
 	// if param are true, set boolean for ai to flee.
 	UFUNCTION()
 	void OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus);
-
+	
+	/** Returns the seeing pawn. Returns null, if our AI has no target */
+	AActor* GetSeeingPawn();
+	
 protected:
 	virtual void BeginPlay() override;
 	
@@ -38,8 +41,8 @@ protected:
 	virtual void OnPossess(APawn* InPawn) override;
 
 	const FName BBEnemyKey = FName("Enemy");
-	
-	
+
+
 	// Configuration for senses under perception class 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Sight Config")
 	UAISenseConfig_Sight* SightConfig;
@@ -61,6 +64,7 @@ private:
 	// Perception of the ai
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Perception", meta=(AllowPrivateAccess=true))
 	TObjectPtr<UAIPerceptionComponent> PerceptionComp;
-
+	
+	
 	
 };

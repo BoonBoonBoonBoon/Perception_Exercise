@@ -45,10 +45,20 @@ void APreyController::SetupPerception()
 
 void APreyController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
 {
-	if(auto* const ch = Cast<APerceptionCharacter>(Actor) )
-	{
+	
+		if (Actor->IsA<APerceptionCharacter>() && !GetSeeingPawn())
+		{
 			GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed());
-	}
+			BlackboardComponent->SetValueAsObject(BBEnemyKey, Actor);
+			return;
+		}
+ 
+	//The character doesn't exist in our updated actors - so make sure
+	//to delete any previous reference of him from the blackboard
+	BlackboardComponent->SetValueAsObject(BBEnemyKey, nullptr);
+
+	
+	/*if(auto* const ch = Cast<APerceptionCharacter>(Actor)){//GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed()); }*/
 }
 
 void APreyController::BeginPlay()
@@ -82,6 +92,8 @@ void APreyController::OnPossess(APawn* InPawn)
 
 AActor* APreyController::GetSeeingPawn()
 {
+	//Return the seeing pawn
+	UObject* object = BlackboardComponent->GetValueAsObject(BBEnemyKey);
+ 
+	return object ?  Cast<AActor>(object) : nullptr;
 }
-
-
