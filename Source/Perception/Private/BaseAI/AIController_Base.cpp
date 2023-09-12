@@ -48,6 +48,8 @@ void AAIController_Base::SetupPerceptionSystem()
 
 		// Sets the dominant sense ( The main sense)
 		GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
+
+		// might need to be moved to tick 
 		GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AAIController_Base::OnTargetDetected);
 		GetPerceptionComponent()->ConfigureSense(*SightConfig);
 	}

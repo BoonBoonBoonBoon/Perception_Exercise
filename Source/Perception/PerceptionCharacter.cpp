@@ -60,6 +60,7 @@ APerceptionCharacter::APerceptionCharacter()
 	
 }
 
+// Stim for ai
 void APerceptionCharacter::SetupStimulusSource()
 {
 	StimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("Stimulus Source"));

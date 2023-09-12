@@ -8,6 +8,7 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "GameFramework/Controller.h"
 #include "PreyController.generated.h"
 
 /**
@@ -19,38 +20,47 @@ class PERCEPTION_API APreyController : public AAIController
 	GENERATED_BODY()
 	
 public:
-	// Used to init values and set/get values from bb asset
-	UBlackboardComponent* BlackboardComp;
 
-	// Used to start BT
-	UBehaviorTreeComponent* BehaviorTreeComp;
+	// Constructor
+	explicit APreyController(FObjectInitializer const& ObjectInitializer);
 
-	// bb key value name
-	const FName BlackboardEnemyKey = FName("Enemy");
+	// Set up the forward init
+	void SetupPerception();
 
-	// Function fires when Perception gets updated 
+	// if param are true, set boolean for ai to flee.
 	UFUNCTION()
-	void OnPerceptionUpdated(TArray<AActor*> UpdatedActors);
-
-	// Sight Sense Config
-	UAISenseConfig_Sight* Sight;
+	void OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus);
 
 protected:
-
-	// BT that contains logic for ai
-	UPROPERTY(EditAnywhere)
-	UBehaviorTree* BehaviorTree;
-
-	// Perception Component of AI
-	UPROPERTY(EditAnywhere)
-	UAIPerceptionComponent* AiPerceptionComponent;
-
-public:
-
-	APreyController();
-
+	virtual void BeginPlay() override;
+	
+	// When Ai is Possessed  
 	virtual void OnPossess(APawn* InPawn) override;
 
-	// Retunrs the seeing pawn. returns null if no  target
-	AActor* GetSeeingPawn();
+	const FName BBEnemyKey = FName("Enemy");
+	
+	
+	// Configuration for senses under perception class 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Sight Config")
+	UAISenseConfig_Sight* SightConfig;
+	
+private:
+	
+	// Start Contains the logic
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = true))
+	TObjectPtr<UBehaviorTree> BehaviorTree;
+	
+	// To start the BT
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI", meta = (AllowPrivateAccess = true))
+	TObjectPtr<UBehaviorTreeComponent> BehaviorTreeComponent;
+
+	// Initialize the bb values && set/get
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI", meta = (AllowPrivateAccess = true))
+	UBlackboardComponent* BlackboardComponent;
+
+	// Perception of the ai
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Perception", meta=(AllowPrivateAccess=true))
+	TObjectPtr<UAIPerceptionComponent> PerceptionComp;
+
+	
 };
