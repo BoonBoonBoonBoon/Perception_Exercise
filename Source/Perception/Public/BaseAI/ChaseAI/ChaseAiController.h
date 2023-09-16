@@ -19,20 +19,30 @@ class PERCEPTION_API AChaseAiController : public AAIController
 
 public:
 	
-	// Constructor
-	AChaseAiController(FObjectInitializer ObjectInitializer);
-	
+	// Constructor.
+	AChaseAiController(FObjectInitializer const& ObjectInitializer);
+
+	// How the Ai will react to seeing the target pawn. 
 	UFUNCTION()
 	void OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus);
 
+	// When Pawn is Possessed by controller, initialize the blackboard assets.
+	virtual void OnPossess(APawn* InPawn) override;
 
+	// Setup Sight and Perception Details. 
+	void SetupInit();
+
+	// Run the behaviour tree immediately. 
+	virtual void BeginPlay() override;
+
+
+protected:
 	
 	/**
 	 * Blackboard is the same, but it’s a data store
 	 * that the Behavior Tree uses to remember what other actors and locations the actor is behaving using/towards.
 	 * It’s your AI’s memory so it knows where to go, who to shoot, etc.
 	 */
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AiSource)
 	TObjectPtr<UBlackboardComponent> BBComp;
 
@@ -41,7 +51,6 @@ public:
 	 * create that controls how AI characters behave.
 	 * It’s like an AI program.
 	 */
-	
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UBehaviorTree> BT;
 	
@@ -50,7 +59,6 @@ public:
 	 * which then points to a Behavior Tree asset that controls a character.
 	 * It’s your AI’s CPU that actually executes the program (above)
 	 */
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AiSource)
 	TObjectPtr<UBehaviorTreeComponent> BTComp;
 	
@@ -61,4 +69,13 @@ public:
 	TObjectPtr<UAIPerceptionComponent> PerceptionComp;
 
 
+public:
+
+	// Assigns a new blackboard key
+	const FName BBPreyKey = FName("Prey");
+
+	const FName BBEnemyKey = FName("Enemy");
+
+
+	
 };

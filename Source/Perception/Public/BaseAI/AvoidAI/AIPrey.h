@@ -14,7 +14,11 @@ class PERCEPTION_API AAIPrey : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AAIPrey();
-
+	
+	class UAIPerceptionStimuliSourceComponent* StimSource;
+	void SetupStim();
+	
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
