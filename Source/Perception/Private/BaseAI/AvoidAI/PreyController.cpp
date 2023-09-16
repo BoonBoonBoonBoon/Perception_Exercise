@@ -71,7 +71,7 @@ void APreyController::BeginPlay()
 		// Runs the Behavior tree
 		RunBehaviorTree(BehaviorTree.Get());
 		// Executes from root
-		BehaviorTreeComponent->StartTree(*BehaviorTree.Get());
+		//BehaviorTreeComponent->StartTree(*BehaviorTree.Get());
 	}
 	
 }
