@@ -5,7 +5,6 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BaseAI/AvoidAI/PreyController.h"
-
 #include "Perception/PerceptionCharacter.h"
 
 APreyController::APreyController(FObjectInitializer const& ObjectInitializer)

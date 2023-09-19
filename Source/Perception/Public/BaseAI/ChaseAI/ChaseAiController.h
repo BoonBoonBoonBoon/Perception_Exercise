@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
+#include "EnvironmentQuery/EnvQuery.h"
 #include "FoodContent/FoodPerceptionStimuli.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "ChaseAiController.generated.h"
@@ -35,7 +36,10 @@ public:
 	// Run the behaviour tree immediately. 
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere, Category="AI")
+	UEnvQuery *FindLocEQS;
 
+	
 protected:
 	
 	/**
