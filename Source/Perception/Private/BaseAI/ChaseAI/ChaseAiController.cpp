@@ -69,7 +69,7 @@ void AChaseAiController::SetupInit()
 		SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
 		SightConfig->SightRadius = 600.f;
 		SightConfig->LoseSightRadius = SightConfig->SightRadius + 50.f;
-		SightConfig->PeripheralVisionAngleDegrees = 120.f;
+		SightConfig->PeripheralVisionAngleDegrees = 45.f;
 		SightConfig->SetMaxAge(5.f);
 		
 		// Sets AI to continue seeing pawn detected location if it still remains within a local area.
