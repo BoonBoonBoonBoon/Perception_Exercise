@@ -30,7 +30,7 @@ public:
 
 	// How the AI will react to Hearing certain things.
 	UFUNCTION()
-	void OnHearNoise(APawn* PawnInstigator, const FVector& Location, float Volume);
+	void OnHearNoise(AActor* ActorInstigator, const FVector& Location, float Volume);
 	
 	
 	// When Pawn is Possessed by controller, initialize the blackboard assets.

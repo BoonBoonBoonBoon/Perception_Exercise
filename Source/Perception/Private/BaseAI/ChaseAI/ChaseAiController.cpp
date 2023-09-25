@@ -35,13 +35,14 @@ void AChaseAiController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimu
 		Blackboard->SetValueAsObject(BBEnemyKey, Actor);
 		if(HearingConfig)
 		{
-			
+			OnHearNoise(Actor, Actor->GetActorLocation(), 1);
 		}
 	}
 }
 
-void AChaseAiController::OnHearNoise(APawn* PawnInstigator, const FVector& Location,float Volume)
+void AChaseAiController::OnHearNoise(AActor* ActorInstigator, const FVector& Location,float Volume)
 {
+	//if();
 }
 
 
@@ -92,6 +93,7 @@ void AChaseAiController::SetupInit()
 		{
 
 			HearingConfig->HearingRange = 900.f;
+			HearingConfig->SetMaxAge(3.f);
 			HearingConfig->DetectionByAffiliation.bDetectEnemies = true;
 			HearingConfig->DetectionByAffiliation.bDetectFriendlies = true;
 			HearingConfig->DetectionByAffiliation.bDetectNeutrals = true;
