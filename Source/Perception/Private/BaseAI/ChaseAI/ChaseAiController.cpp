@@ -3,7 +3,6 @@
 
 #include "BaseAI/ChaseAI/ChaseAiController.h"
 
-#include "BaseAI/AvoidAI/AIPrey.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/AIPerceptionComponent.h"
@@ -17,7 +16,7 @@ AChaseAiController::AChaseAiController(FObjectInitializer const& ObjectInitializ
 	SetupInit();
 }
 
-void AChaseAiController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
+/*void AChaseAiController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
 {
 	// (Delegate Call) When a pawn enters the sight of current AI, if it has stimulus it will decide on how to react.
 	if(auto const Prey = Cast<AAIPrey>(Actor))
@@ -38,7 +37,7 @@ void AChaseAiController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimu
 			OnHearNoise(Actor, Actor->GetActorLocation(), 1);
 		}
 	}
-}
+}*/
 
 void AChaseAiController::OnHearNoise(AActor* ActorInstigator, const FVector& Location,float Volume)
 {
@@ -103,7 +102,7 @@ void AChaseAiController::SetupInit()
 		// Sets Dominant sense (Main) GetSense returns the current implementation.
 		GetPerceptionComponent()->SetDominantSense(*HearingConfig->GetSenseImplementation());
 		// Delegate to sense function, when perception receives new info fire off target detection function. 
-		GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AChaseAiController::OnTargetDetected);
+		//GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AChaseAiController::OnTargetDetected);
 		// Makes everything above configured and set to the new config.
 		GetPerceptionComponent()->ConfigureSense(*SightConfig);
 		

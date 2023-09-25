@@ -25,8 +25,10 @@ public:
 	AChaseAiController(FObjectInitializer const& ObjectInitializer);
 
 	// How the Ai will react to seeing the target pawn. 
+	/*
 	UFUNCTION()
 	void OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus);
+	*/
 
 	// How the AI will react to Hearing certain things.
 	UFUNCTION()
