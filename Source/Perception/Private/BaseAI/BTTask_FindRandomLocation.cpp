@@ -52,7 +52,7 @@ FString UBTTask_FindRandomLocation::GetStaticDescription() const
 UBTTask_FindRandomLocation::UBTTask_FindRandomLocation()
 {
 	// Gives node name, What we see on bp node
-	NodeName = "FInd Random Location in NavMesh";
+	NodeName = "Find Random Location in NavMesh";
 
 	// Accept only vectors, since the blackboard key only takes vectors as a data type
 	// This says that is filters only for vectors and nothing else for the task * IE. SetValueVector

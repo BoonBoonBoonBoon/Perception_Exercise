@@ -7,6 +7,7 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "EnvironmentQuery/EnvQuery.h"
 #include "FoodContent/FoodPerceptionStimuli.h"
+#include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "ChaseAiController.generated.h"
 
@@ -27,6 +28,11 @@ public:
 	UFUNCTION()
 	void OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus);
 
+	// How the AI will react to Hearing certain things.
+	UFUNCTION()
+	void OnHearNoise(APawn* PawnInstigator, const FVector& Location, float Volume);
+	
+	
 	// When Pawn is Possessed by controller, initialize the blackboard assets.
 	virtual void OnPossess(APawn* InPawn) override;
 
@@ -65,10 +71,14 @@ protected:
 	 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AiSource)
 	TObjectPtr<UBehaviorTreeComponent> BTComp;
-	
+
+	// Sight
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UAISenseConfig_Sight> SightConfig;
 
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UAISenseConfig_Hearing> HearingConfig;
+	
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UAIPerceptionComponent> PerceptionComp;
 
@@ -80,6 +90,8 @@ public:
 
 	const FName BBEnemyKey = FName("Enemy");
 
+	const FName BBHearPlayerKey = FName("HearPlayer");
 
+	const FName BBHearPreyKey = FName("HearPrey");
 	
 };

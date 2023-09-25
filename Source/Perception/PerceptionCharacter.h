@@ -43,9 +43,23 @@ class APerceptionCharacter : public ACharacter
 public:
 	APerceptionCharacter();
 
+	/***  Perception Components   ***/
+	
+	// Used as a generator for the pawn to emit a stimuli. Need this as the AI will use this as a tool to percept.
 	class UAIPerceptionStimuliSourceComponent* StimuliSource;
 	void SetupStimulusSource();
 
+	// The function that plays the sound (USound is the class that's responsible for playable sound object)
+	UFUNCTION(BlueprintCallable, Category=AI)
+	void ReportNoise(USoundBase* SoundToPlay, float Volume);
+
+	// Emitter component used to emit the sound to nearby ai.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPawnNoiseEmitterComponent* NoiseEmitter;
+
+
+
+	
 	void MoveForward(float value);
 	void MoveSide(float Value);
 

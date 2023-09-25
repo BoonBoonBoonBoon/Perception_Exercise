@@ -10,6 +10,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "BaseAI/AIBase.h"
+#include "Components/PawnNoiseEmitterComponent.h"
+#include "DSP/Osc.h"
+#include "Kismet/GameplayStatics.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Hearing.h"
 #include "Perception/AISense_Sight.h"
@@ -57,6 +60,8 @@ APerceptionCharacter::APerceptionCharacter()
 	Collision = CreateDefaultSubobject<USphereComponent>("Collision");
 	Collision->SetupAttachment(RootComponent);
 
+	// Noise Emitter
+	NoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("PawnNoiseEmitter"));
 	
 }
 
@@ -67,8 +72,21 @@ void APerceptionCharacter::SetupStimulusSource()
 	if(StimuliSource)
 	{
 		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
-		//StimuliSource->RegisterForSense(TSubclassOf<UAISense_Hearing>());
+		StimuliSource->RegisterForSense(TSubclassOf<UAISense_Hearing>());
 		StimuliSource->RegisterWithPerceptionSystem();
+	}
+}
+
+void APerceptionCharacter::ReportNoise(USoundBase* SoundToPlay, float Volume)
+{
+	// If the USound is valid, Play it and report it to the game.
+	if(SoundToPlay)
+	{
+		// Plays the actual sound
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(),SoundToPlay, GetActorLocation(), Volume);
+
+		//Report we played a sound at a certain volume in a specific location
+		MakeNoise(Volume, this, GetActorLocation());
 	}
 }
 

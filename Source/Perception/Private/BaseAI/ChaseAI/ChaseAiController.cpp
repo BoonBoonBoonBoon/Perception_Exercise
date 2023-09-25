@@ -33,9 +33,17 @@ void AChaseAiController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimu
 		UE_LOG(LogTemp, Warning, TEXT("Player!") );
 		GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed());
 		Blackboard->SetValueAsObject(BBEnemyKey, Actor);
+		if(HearingConfig)
+		{
+			
+		}
 	}
-	
 }
+
+void AChaseAiController::OnHearNoise(APawn* PawnInstigator, const FVector& Location,float Volume)
+{
+}
+
 
 void AChaseAiController::OnPossess(APawn* InPawn)
 {
@@ -60,7 +68,8 @@ void AChaseAiController::OnPossess(APawn* InPawn)
 
 void AChaseAiController::SetupInit()
 {
-	
+
+	// Sight Config Etc.
 	SightConfig=CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
 	if(SightConfig)
 	{
@@ -71,26 +80,39 @@ void AChaseAiController::SetupInit()
 		SightConfig->LoseSightRadius = SightConfig->SightRadius + 50.f;
 		SightConfig->PeripheralVisionAngleDegrees = 45.f;
 		SightConfig->SetMaxAge(5.f);
-		
+
 		// Sets AI to continue seeing pawn detected location if it still remains within a local area.
 		SightConfig->AutoSuccessRangeFromLastSeenLocation = 800.f;
 		SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 		SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
 		SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
-		
+		// Hearing Config Etc.
+		HearingConfig=CreateDefaultSubobject<UAISenseConfig_Hearing>(TEXT("HearingConfig"));
+		if(HearingConfig)
+		{
+
+			HearingConfig->HearingRange = 900.f;
+			HearingConfig->DetectionByAffiliation.bDetectEnemies = true;
+			HearingConfig->DetectionByAffiliation.bDetectFriendlies = true;
+			HearingConfig->DetectionByAffiliation.bDetectNeutrals = true;
+			GetPerceptionComponent()->ConfigureSense(*HearingConfig);
+		}
+
 		// Sets Dominant sense (Main) GetSense returns the current implementation.
-		GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
+		GetPerceptionComponent()->SetDominantSense(*HearingConfig->GetSenseImplementation());
 		// Delegate to sense function, when perception receives new info fire off target detection function. 
 		GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AChaseAiController::OnTargetDetected);
 		// Makes everything above configured and set to the new config.
 		GetPerceptionComponent()->ConfigureSense(*SightConfig);
+		
+		
 	}
 }
 
 void AChaseAiController::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	// If the behaviour tree is valid
 	if (IsValid(BT.Get()))
 	{
