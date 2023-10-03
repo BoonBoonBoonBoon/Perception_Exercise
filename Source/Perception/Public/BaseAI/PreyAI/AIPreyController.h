@@ -6,7 +6,9 @@
 #include "AIController.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "EnvironmentQuery/EnvQuery.h"
+#include "Perception/AISenseConfig_Damage.h"
 #include "Perception/AISenseConfig_Hearing.h"
+#include "Perception/AISenseConfig_Prediction.h"
 #include "Perception/AISense_Sight.h"
 #include "AIPreyController.generated.h"
 
@@ -20,6 +22,13 @@ class PERCEPTION_API AAIPreyController : public AAIController
 
 public:
 
+	//////// TO DO
+	// Make Custom Debugger
+	// Make custom senses 
+	// 
+	
+
+	
 	AAIPreyController(FObjectInitializer const& ObjectInitializer);
 
 	virtual void BeginPlay() override;
@@ -56,6 +65,12 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UAISenseConfig_Sight> Config_Sight;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UAISenseConfig_Prediction> Config_Prediction;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UAISenseConfig_Damage> Config_Damage;
 	
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UAIPerceptionComponent> PerceptionComp;
@@ -70,6 +85,15 @@ public:
 
 	const FName BBHearPredatorKey = FName("HearPredator");
 
+	// Ai Statistics
 
+	// Health
+	float DefaultHealth;
+	float CurrentHealth;
+	float Damage;
+	bool bHasBeenHit;
+	
+	
+	
 	
 };
