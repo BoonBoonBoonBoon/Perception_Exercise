@@ -19,6 +19,8 @@ public:
 
 	UPROPERTY()
 	AAIController_Base* Controller;
+
+	class APreyAIPawn* PreyAIPawn;
 	
 	// Execute task function
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;

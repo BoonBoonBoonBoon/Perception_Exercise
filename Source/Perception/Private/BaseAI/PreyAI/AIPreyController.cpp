@@ -7,6 +7,7 @@
 #include "BaseAI/ChaseAI/ChaseAI.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Perception/PerceptionCharacter.h"
 
 AAIPreyController::AAIPreyController(FObjectInitializer const& ObjectInitializer)
@@ -15,6 +16,7 @@ AAIPreyController::AAIPreyController(FObjectInitializer const& ObjectInitializer
 	BBComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
 
 	setupInit();
+	
 }
 
 void AAIPreyController::BeginPlay()
@@ -105,3 +107,4 @@ void AAIPreyController::OnPossess(APawn* InPawn)
 		}
 	}
 }
+

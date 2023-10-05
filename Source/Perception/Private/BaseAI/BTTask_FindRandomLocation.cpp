@@ -5,7 +5,9 @@
 
 #include "AIController.h"
 #include "NavigationSystem.h"
+#include "BaseAI/PreyAI/PreyAIPawn.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Execute is the logic thats created in the normal bps 
 EBTNodeResult::Type UBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)

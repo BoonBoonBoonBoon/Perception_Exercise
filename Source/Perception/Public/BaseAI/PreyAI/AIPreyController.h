@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "PreyAIPawn.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "EnvironmentQuery/EnvQuery.h"
 #include "Perception/AISenseConfig_Damage.h"
@@ -27,7 +28,7 @@ public:
 	// Make custom senses 
 	// 
 	
-
+	
 	
 	AAIPreyController(FObjectInitializer const& ObjectInitializer);
 
@@ -40,12 +41,18 @@ public:
 	
 	// Pawn on possess	
 	virtual void OnPossess(APawn* InPawn) override;
+
+	
 	
 protected:
 	// EQS
 	UPROPERTY(EditAnywhere, Category="AI")
 	UEnvQuery* EnvQuery;
 
+	// Array for each actor
+	TArray<APreyAIPawn> PreyAIPawns;
+
+	class APreyAIPawn* PreyAIPawn;
 	
 	// Behaviour tree & Blackboard
 	
@@ -92,8 +99,15 @@ public:
 	float CurrentHealth;
 	float Damage;
 	bool bHasBeenHit;
+
+	// Speed 
+	float DefaultSpeed = 250;
+	float MaxSpeed = 600;
+	float DamagedSpeed = 350;
+
 	
-	
+	bool Alert;
+	bool Calm;
 	
 	
 };
