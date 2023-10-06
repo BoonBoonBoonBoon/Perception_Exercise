@@ -11,7 +11,7 @@
 EBTNodeResult::Type UBTTask_AvoidPlayer::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 
-	// Assign the controller as the owner of thr BTComp.
+	/*// Assign the controller as the owner of thr BTComp.
 	AAIController* AiController = OwnerComp.GetAIOwner();
 	// need to assign a pawn to use the controller. 
 	const APawn* AIPawn = AiController->GetPawn();
@@ -31,17 +31,42 @@ EBTNodeResult::Type UBTTask_AvoidPlayer::ExecuteTask(UBehaviorTreeComponent& Own
 	FVector target = Pawn->GetActorLocation();
 	FVector CurrentLocation = AIPawn->GetActorLocation();
 
-	FVector direction = target - CurrentLocation;
+	FVector direction = target - CurrentLocation;*/
 
+
+
+
+
+
+
+	
 	// Empty Struct since we do not have a definitive location.
 	FNavLocation Location{};
 
+	// Get the ai pawn* Grab the Ai controller of the owner component, which is one of the params being passed in
+	AAIController* AiController = OwnerComp.GetAIOwner();
+	const APawn* AIPawn = AiController->GetPawn();
+
+	// Get Pawn Origin
+	const FVector Origin = AIPawn->GetActorLocation();
+
+	
 	// Refrence for navsystem. Which gets current level. 
-	const UNavigationSystemV1* NavSys = UNavigationSystemV1::GetCurrent(GetWorld()); 
-	if(IsValid(NavSys) && NavSys->GetRandomReachablePointInRadius(Origin, Radius, Location))
+	const UNavigationSystemV1* NavSys = UNavigationSystemV1::GetCurrent(GetWorld());
+
+	
+	if(IsValid(NavSys) && NavSys->GetRandomReachablePointInRadius(Origin, SearchRadius, ))
+	{
+		
+	}
+
+
+	
+	/*if(IsValid(NavSys) && NavSys->GetRandomReachablePointInRadius(Origin, Radius, Location))
 	{
 		AiController->GetBlackboardComponent()->SetValueAsVector(BlackboardKey.SelectedKeyName, Location.Location);
 	}
+	*/
 	
 	return Super::ExecuteTask(OwnerComp, NodeMemory);
 	

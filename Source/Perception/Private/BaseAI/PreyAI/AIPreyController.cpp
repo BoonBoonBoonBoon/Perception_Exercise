@@ -48,7 +48,7 @@ void AAIPreyController::setupInit()
 			Config_Sight->SightRadius = 400.f;
 			Config_Sight->LoseSightRadius = Config_Sight->SightRadius + 100.f;
 			Config_Sight->PeripheralVisionAngleDegrees = 90.f;
-			Config_Sight->SetMaxAge(5.f);
+			Config_Sight->SetMaxAge(3.f);
 			
 			Config_Sight->AutoSuccessRangeFromLastSeenLocation = 520.f;
 			Config_Sight->DetectionByAffiliation.bDetectEnemies = true;
@@ -57,7 +57,7 @@ void AAIPreyController::setupInit()
 
 			// Hearing Config
 			Config_Hearing->HearingRange = 900.f;
-			Config_Hearing->SetMaxAge(3.f);
+			Config_Hearing->SetMaxAge(2.f);
 			Config_Hearing->DetectionByAffiliation.bDetectEnemies = true;
 			Config_Hearing->DetectionByAffiliation.bDetectFriendlies = true;
 			Config_Hearing->DetectionByAffiliation.bDetectNeutrals = true;
