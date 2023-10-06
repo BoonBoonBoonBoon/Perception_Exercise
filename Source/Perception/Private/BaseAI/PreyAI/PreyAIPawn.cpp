@@ -11,9 +11,29 @@
 // Sets default values
 APreyAIPawn::APreyAIPawn()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	GetCharacterMovement()->MaxWalkSpeed = 300;
+
+	// Radius Detection 
+	RadiusSphere = CreateDefaultSubobject<USphereComponent>("RadiusSphere");
+	RadiusSphere->SetupAttachment(RootComponent);
+	RadiusSphere->SetSphereRadius(1000.f);
+
+	RadiusSphere->OnComponentBeginOverlap.AddDynamic(this, &APreyAIPawn::OnOverlapBegin);
+	//RadiusSphere->OnComponentEndOverlap.AddDynamic(this, &APreyAIPawn::OnOverlapEnd);
+}
+
+void APreyAIPawn::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	// Maybe learn team id first...
+	
+}
+
+void APreyAIPawn::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
 }
 
 // Called when the game starts or when spawned
@@ -28,6 +48,8 @@ void APreyAIPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//SetupSphere();
+	
 }
 
 // Called to bind functionality to input
@@ -56,23 +78,18 @@ void APreyAIPawn::SetupSphere()
 	// Declare collision shape assign sphere shape and set radius
 	FCollisionShape CollisionShape;
 	CollisionShape.ShapeType = ECollisionShape::Sphere;
-	CollisionShape.SetSphere(SphereRadius);
+	CollisionShape.SetSphere(SphereRadius + 800);
 	
 	bool bHit = GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat(), ECC, CollisionShape);
-
-	/*If the raycast hit a number of objects, iterate through them and print their name in the console*/
-	if (bHit)
-	{
-		for (auto It = HitResults.CreateIterator(); It; It++)
-		{
-			GLog->Log((*It).Actor->GetName());
-		}
-	}
-
+	
 	FVector CenterOfSphere = ((EndLocation - StartLocation) / 2) + StartLocation;
  
 	/*Draw the sphere in the viewport*/
-	DrawDebugSphere(GetWorld(), CenterOfSphere, CollisionShape.GetSphereRadius(), 100, FColor::Blue, true);
- 
+	DrawDebugSphere(GetWorld(), CenterOfSphere, CollisionShape.GetSphereRadius(), Segements, FColor::Blue, false);
+	
+	if(bHit)
+	{
+		//DrawDebugBox()
+	}
 }
 
