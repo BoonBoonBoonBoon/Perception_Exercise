@@ -10,6 +10,7 @@
 #include "Perception/AISenseConfig_Damage.h"
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AISenseConfig_Prediction.h"
+#include "Perception/AISenseConfig_Team.h"
 #include "Perception/AISense_Sight.h"
 #include "AIPreyController.generated.h"
 
@@ -78,6 +79,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UAISenseConfig_Damage> Config_Damage;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UAISenseConfig_Team> Config_Team;
 	
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UAIPerceptionComponent> PerceptionComp;
