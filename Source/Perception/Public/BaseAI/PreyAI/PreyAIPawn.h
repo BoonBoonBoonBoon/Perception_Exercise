@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/Character.h"
 #include "PreyAIPawn.generated.h"
 
@@ -14,7 +15,6 @@ class PERCEPTION_API APreyAIPawn : public ACharacter
 public:
 	// Sets default values for this character's properties
 	APreyAIPawn();
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -25,7 +25,27 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	
+	// Checks 
 	bool bSeePredator;
+
+protected:
+
+	// SphereLineTraces
+
+	// Height of sphere starting from location of the actor
+	UPROPERTY(EditAnywhere,Category="Sweep")
+	float SphereHeight = 200;
+
+	// Raidus of the sphere trace
+	UPROPERTY(EditAnywhere,Category="Sweep")
+	float SphereRadius = 500;
+
+	// How many segements are apart of the sphere - visual
+	UPROPERTY(EditAnywhere,Category="Sweep")
+	int32 Segements = 100;
+	
+	void SetupSphere();
+
 	
 };

@@ -55,10 +55,11 @@ EBTNodeResult::Type UBTTask_AvoidPlayer::ExecuteTask(UBehaviorTreeComponent& Own
 	const UNavigationSystemV1* NavSys = UNavigationSystemV1::GetCurrent(GetWorld());
 
 	
-	if(IsValid(NavSys) && NavSys->GetRandomReachablePointInRadius(Origin, SearchRadius, ))
+	/*if(IsValid(NavSys) && NavSys->GetRandomReachablePointInRadius(Origin, SearchRadius, ))
 	{
 		
 	}
+	*/
 
 
 	
