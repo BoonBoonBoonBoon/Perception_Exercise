@@ -5,8 +5,12 @@
 
 #include "MeshUtilitiesCommon.h"
 #include "Chaos/Deformable/ChaosDeformableCollisionsProxy.h"
+#include "Components/PawnNoiseEmitterComponent.h"
 #include "EntitySystem/MovieSceneEntitySystemRunner.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISense_Hearing.h"
+#include "Perception/AISense_Sight.h"
 
 // Sets default values
 APreyAIPawn::APreyAIPawn()
@@ -19,6 +23,8 @@ APreyAIPawn::APreyAIPawn()
 	RadiusSphere = CreateDefaultSubobject<USphereComponent>("RadiusSphere");
 	RadiusSphere->SetupAttachment(RootComponent);
 	RadiusSphere->SetSphereRadius(1000.f);
+
+	NoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("PawnNoiseEmitter"));
 
 	RadiusSphere->OnComponentBeginOverlap.AddDynamic(this, &APreyAIPawn::OnOverlapBegin);
 	//RadiusSphere->OnComponentEndOverlap.AddDynamic(this, &APreyAIPawn::OnOverlapEnd);
@@ -41,6 +47,26 @@ void APreyAIPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	SetupSphere();
+}
+
+void APreyAIPawn::SetupStimulusSource()
+{
+
+	// Give Specific Tag
+	
+	StimuliSourcePrey = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("Stimulus Source"));
+	if(StimuliSourcePrey)
+	{
+		StimuliSourcePrey->RegisterForSense(TSubclassOf<UAISense_Sight>());
+		StimuliSourcePrey->RegisterForSense(TSubclassOf<UAISense_Hearing>());
+		StimuliSourcePrey->RegisterWithPerceptionSystem();
+	}
+	
+}
+
+void APreyAIPawn::ReportNoise(USoundBase* SoundToPlay, float Volume)
+{
+	// report a noise 
 }
 
 // Called every frame
