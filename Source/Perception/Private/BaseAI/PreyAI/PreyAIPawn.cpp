@@ -8,6 +8,7 @@
 #include "Components/PawnNoiseEmitterComponent.h"
 #include "EntitySystem/MovieSceneEntitySystemRunner.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Hearing.h"
 #include "Perception/AISense_Sight.h"
@@ -66,7 +67,15 @@ void APreyAIPawn::SetupStimulusSource()
 
 void APreyAIPawn::ReportNoise(USoundBase* SoundToPlay, float Volume)
 {
-	// report a noise 
+	// report a noise
+	if(SoundToPlay)
+	{
+		// Plays the actual sound
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(),SoundToPlay, GetActorLocation(), Volume);
+
+		//Report we played a sound at a certain volume in a specific location
+		MakeNoise(Volume, this, GetActorLocation());
+	}
 }
 
 // Called every frame
