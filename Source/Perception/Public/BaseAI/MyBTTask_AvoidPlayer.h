@@ -16,12 +16,15 @@ class PERCEPTION_API UMyBTTask_AvoidPlayer : public UBTTask_BlackboardBase
 public:
 	// Execute task function
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
+	// Keep Distance from object 
+	void MaintainDistanceFromObject(const AActor* ActorToMaintainDistanceFrom, float DesiredDistance);
 	
 	// Gives node a name
 	virtual FString GetStaticDescription() const override;
 
 	UMyBTTask_AvoidPlayer();
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Avoid", meta=(AllowPrivateAccess=true))
 	float AvoidDistance = 500.f;
 };
