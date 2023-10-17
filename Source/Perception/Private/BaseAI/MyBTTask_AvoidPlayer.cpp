@@ -5,25 +5,31 @@
 
 #include "AIController.h"
 #include "NavigationSystem.h"
+#include "BaseAI/PreyAI/AIPreyController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/PerceptionCharacter.h"
 
 EBTNodeResult::Type UMyBTTask_AvoidPlayer::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	
-	AAIController* AIController = Cast<AAIController>(OwnerComp.GetAIOwner());
+
+	/*
+	// Cast Controller to the controller we want to use 
+	AAIController* AIController = Cast<AAIPreyController>(OwnerComp.GetAIOwner());
 	if (!AIController)
 	{
+		// Cancel Task 
 		return EBTNodeResult::Failed;
 	}
 
-	// Get blackboard keys
+	// Get the AI's location
 	FVector AILocation = AIController->GetPawn()->GetActorLocation();
+	
 	FVector OtherAILocation = GetBlackboardComponent()->GetValueAsVector(GetSelectedBlackboardKey());
 
-	// Calculate the distance to the other AI
+	// Calculate the distance from current ai to the other AI
 	float DistanceToOtherAI = FVector::Dist(AILocation, OtherAILocation);
 
+	// If the distance to the other ai is below the safe diatance 
 	if (DistanceToOtherAI < AcceptanceRadius)
 	{
 		// Calculate a new target location to avoid the other AI
@@ -43,6 +49,7 @@ EBTNodeResult::Type UMyBTTask_AvoidPlayer::ExecuteTask(UBehaviorTreeComponent& O
 			}
 		}
 	}
+	*/
 
 	
 	// finish task if succeeded 
@@ -52,7 +59,7 @@ EBTNodeResult::Type UMyBTTask_AvoidPlayer::ExecuteTask(UBehaviorTreeComponent& O
 
 void UMyBTTask_AvoidPlayer::MaintainDistanceFromObject(const AActor* ActorToMaintainDistanceFrom, float DesiredDistance)
 {
-	if (!ActorToMaintainDistanceFrom)
+	/*if (!ActorToMaintainDistanceFrom)
 	{
 		// Handle the case where the object is not valid
 		return;
@@ -84,7 +91,7 @@ void UMyBTTask_AvoidPlayer::MaintainDistanceFromObject(const AActor* ActorToMain
 				UNavigationSystemV1::SimpleMoveToLocation(GetController(), RandomLocation.Location);
 			}
 		}
-	}
+	}*/
 }
 
 FString UMyBTTask_AvoidPlayer::GetStaticDescription() const
