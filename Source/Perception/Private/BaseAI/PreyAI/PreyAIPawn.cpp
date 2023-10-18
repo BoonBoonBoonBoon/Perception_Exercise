@@ -3,7 +3,11 @@
 
 #include "BaseAI/PreyAI/PreyAIPawn.h"
 
+#include "AIController.h"
 #include "MeshUtilitiesCommon.h"
+#include "BaseAI/ChaseAI/ChaseAiController.h"
+#include "BaseAI/PreyAI/AIPreyController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Chaos/Deformable/ChaosDeformableCollisionsProxy.h"
 #include "Components/PawnNoiseEmitterComponent.h"
 #include "EntitySystem/MovieSceneEntitySystemRunner.h"
@@ -31,8 +35,24 @@ APreyAIPawn::APreyAIPawn()
 	//RadiusSphere->OnComponentEndOverlap.AddDynamic(this, &APreyAIPawn::OnOverlapEnd);
 }
 
+void APreyAIPawn::TestDistFunc()
+{
+	/*
+	AAIController* AIController = Cast<AAIPreyController>(Owner);
+	const FVector CurrentAILoc = AIController->GetPawn()->GetActorLocation();
+
+	AChaseAiController* PredatorCont = nullptr;
+	FVector OtherAILocation = PredatorCont->GetPawn()->GetActorLocation();
+
+	// Calculate the distance from current ai to the other AI
+	float DistanceToOtherAI = FVector::Dist(CurrentAILoc, OtherAILocation);
+	UE_LOG(LogTemp, Warning, TEXT("Distance to Other AI: %f"), DistanceToOtherAI);
+	*/
+	
+}
+
 void APreyAIPawn::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                 UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	// Maybe learn team id first...
 	
@@ -48,6 +68,7 @@ void APreyAIPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	SetupSphere();
+	TestDistFunc();
 }
 
 void APreyAIPawn::SetupStimulusSource()
@@ -84,6 +105,7 @@ void APreyAIPawn::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	//SetupSphere();
+
 	
 }
 

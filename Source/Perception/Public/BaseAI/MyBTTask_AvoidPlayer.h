@@ -27,4 +27,6 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Avoid", meta=(AllowPrivateAccess=true))
 	float AvoidDistance = 500.f;
+
+	class AChaseAiController* PredatorCont;
 };

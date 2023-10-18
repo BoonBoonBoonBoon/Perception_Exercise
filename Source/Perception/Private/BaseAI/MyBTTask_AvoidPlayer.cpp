@@ -5,6 +5,7 @@
 
 #include "AIController.h"
 #include "NavigationSystem.h"
+#include "BaseAI/ChaseAI/ChaseAiController.h"
 #include "BaseAI/PreyAI/AIPreyController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/PerceptionCharacter.h"
@@ -12,8 +13,9 @@
 EBTNodeResult::Type UMyBTTask_AvoidPlayer::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 
-	/*
-	// Cast Controller to the controller we want to use 
+	
+	// Cast Controller to the controller we want to use
+	// Might be wrong 
 	AAIController* AIController = Cast<AAIPreyController>(OwnerComp.GetAIOwner());
 	if (!AIController)
 	{
@@ -22,26 +24,30 @@ EBTNodeResult::Type UMyBTTask_AvoidPlayer::ExecuteTask(UBehaviorTreeComponent& O
 	}
 
 	// Get the AI's location
-	FVector AILocation = AIController->GetPawn()->GetActorLocation();
-	
-	FVector OtherAILocation = GetBlackboardComponent()->GetValueAsVector(GetSelectedBlackboardKey());
+	const FVector CurrentAILoc = AIController->GetPawn()->GetActorLocation();
+
+	// Come back and make sure that DBA is on and can only detect enemies and not those who pose a threat
+
+	//???? 
+	FVector OtherAILocation = PredatorCont->GetBlackboardComponent()->GetValueAsVector(GetSelectedBlackboardKey());
 
 	// Calculate the distance from current ai to the other AI
-	float DistanceToOtherAI = FVector::Dist(AILocation, OtherAILocation);
-
-	// If the distance to the other ai is below the safe diatance 
-	if (DistanceToOtherAI < AcceptanceRadius)
+	float DistanceToOtherAI = FVector::Dist(CurrentAILoc, OtherAILocation);
+	
+	
+	// If the distance to the other ai is below the safe distance 
+	if (DistanceToOtherAI < AvoidDistance)
 	{
 		// Calculate a new target location to avoid the other AI
-		FVector Direction = (AILocation - OtherAILocation).GetSafeNormal();
-		FVector NewTargetLocation = OtherAILocation + Direction * AcceptanceRadius;
+		FVector Direction = (CurrentAILoc - OtherAILocation).GetSafeNormal();
+		FVector NewTargetLocation = OtherAILocation + Direction * AvoidDistance;
 
 		// Find a random point within a radius around the adjusted target location
 		UNavigationSystemV1* NavSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld());
 		if (NavSystem)
 		{
 			FNavLocation RandomLocation;
-			if (NavSystem->GetRandomPointInNavigableRadius(NewTargetLocation, AcceptanceRadius, RandomLocation))
+			if (NavSystem->GetRandomPointInNavigableRadius(NewTargetLocation, AvoidDistance, RandomLocation))
 			{
 				// Move the AI towards the random location
 				AIController->MoveToLocation(RandomLocation.Location);
@@ -49,8 +55,6 @@ EBTNodeResult::Type UMyBTTask_AvoidPlayer::ExecuteTask(UBehaviorTreeComponent& O
 			}
 		}
 	}
-	*/
-
 	
 	// finish task if succeeded 
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);

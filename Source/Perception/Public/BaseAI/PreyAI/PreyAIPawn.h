@@ -16,6 +16,9 @@ public:
 	// Sets default values for this character's properties
 	APreyAIPawn();
 
+	void TestDistFunc();
+
+
 	// Radius for enemies nearby
 	UPROPERTY(EditAnywhere,Category=Tracers)
 	class USphereComponent* RadiusSphere;
