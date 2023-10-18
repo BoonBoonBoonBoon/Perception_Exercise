@@ -26,12 +26,12 @@ EBTNodeResult::Type UMyBTTask_AvoidPlayer::ExecuteTask(UBehaviorTreeComponent& O
 	// Get the AI's location
 	const FVector CurrentAILoc = AIController->GetPawn()->GetActorLocation();
 
-	// Come back and make sure that DBA is on and can only detect enemies and not those who pose a threat
+	// V---Come back and make sure that DBA is on and can only detect enemies and not those who pose a threat---V
 
-	//???? 
+	//The issue is here --V  
 	FVector OtherAILocation = PredatorCont->GetBlackboardComponent()->GetValueAsVector(GetSelectedBlackboardKey());
 
-	// Calculate the distance from current ai to the other AI
+	// Calc the dist between current ai to the other AI
 	float DistanceToOtherAI = FVector::Dist(CurrentAILoc, OtherAILocation);
 	
 	
