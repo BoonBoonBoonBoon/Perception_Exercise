@@ -7,19 +7,19 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AISenseConfig_Sight.h"
-#include "BaseAINoiseTrapController.generated.h"
+#include "NoiseTrapController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PERCEPTION_API ABaseAINoiseTrapController : public AAIController
+class PERCEPTION_API ANoiseTrapController : public AAIController
 {
 	GENERATED_BODY()
 
 public:
-
-	ABaseAINoiseTrapController(FObjectInitializer const& ObjectInitializer);
+	
+	ANoiseTrapController(FObjectInitializer const& ObjectInitializer);
 	
 	virtual void BeginPlay() override;
 
@@ -57,5 +57,4 @@ public:
 	
 	// Blackboard key for seeing the player
 	const FName BBSeePlayerKey = FName("SeePlayer");
-	
 };

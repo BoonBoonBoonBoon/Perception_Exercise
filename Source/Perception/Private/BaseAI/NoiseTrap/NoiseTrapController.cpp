@@ -1,25 +1,23 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BaseAI/NoiseTrap/BaseAINoiseTrapController.h"
+#include "BaseAI/NoiseTrap/NoiseTrapController.h"
 
 #include "BehaviorTree/BehaviorTree.h"
-#include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/AIPerceptionComponent.h"
-#include "Perception/AISenseConfig_Hearing.h"
-#include "Perception/AISenseConfig_Sight.h"
 #include "Perception/PerceptionCharacter.h"
 
-
-ABaseAINoiseTrapController::ABaseAINoiseTrapController(FObjectInitializer const& ObjectInitializer)
+ANoiseTrapController::ANoiseTrapController(FObjectInitializer const& ObjectInitializer)
 {
 	// Initialize Components BT && BB 
 	BTComp = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTreeComponent"));
 	BBComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
+
+	setupInit();
 }
 
-void ABaseAINoiseTrapController::BeginPlay()
+void ANoiseTrapController::BeginPlay()
 {
 	Super::BeginPlay();
 	// If the behaviour tree is valid
@@ -33,20 +31,19 @@ void ABaseAINoiseTrapController::BeginPlay()
 	};
 }
 
-void ABaseAINoiseTrapController::setupInit()
+void ANoiseTrapController::setupInit()
 {
 	// SubObject for Sight 
 	Config_Sight = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight Config");
 	
 	// Sight Config // 
 	SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
-	
 	if (Config_Sight)
 	{
-		Config_Sight->SightRadius = 200.f;
-		//Config_Sight->LoseSightRadius = Config_Sight->SightRadius + 100.f;
-		Config_Sight->PeripheralVisionAngleDegrees = 360.f;
-		//Config_Sight->SetMaxAge(3.f);
+		Config_Sight->SightRadius = 500.f;
+		Config_Sight->LoseSightRadius = Config_Sight->SightRadius + 200.f;
+		Config_Sight->PeripheralVisionAngleDegrees = 180.f;
+		Config_Sight->SetMaxAge(0.f);
 
 		Config_Sight->DetectionByAffiliation.bDetectEnemies = true;
 		Config_Sight->DetectionByAffiliation.bDetectFriendlies = true;
@@ -58,8 +55,8 @@ void ABaseAINoiseTrapController::setupInit()
 		if (Config_Hearing)
 		{
 
-			Config_Hearing->HearingRange = 900.f;
-			Config_Hearing->SetMaxAge(2.f);
+			Config_Hearing->HearingRange = 800.f;
+			Config_Hearing->SetMaxAge(0.f);
 			Config_Hearing->DetectionByAffiliation.bDetectEnemies = true;
 			Config_Hearing->DetectionByAffiliation.bDetectFriendlies = true;
 			Config_Hearing->DetectionByAffiliation.bDetectNeutrals = true;
@@ -67,14 +64,13 @@ void ABaseAINoiseTrapController::setupInit()
 
 			GetPerceptionComponent()->SetDominantSense(*Config_Hearing->GetSenseImplementation());
 			// might need to be moved to tick 
-			GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &ABaseAINoiseTrapController::OnTargetDetected);
+			GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &ANoiseTrapController::OnTargetDetected);
 			GetPerceptionComponent()->ConfigureSense(*Config_Sight);
 		}
 	}
 }
 
-
-void ABaseAINoiseTrapController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
+void ANoiseTrapController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 {
 	// (Delegate Call) When a pawn enters the sight of current AI, if it has stimulus it will decide on how to react.
 	if(auto const Predator = Cast<APerceptionCharacter>(Actor))
@@ -99,7 +95,7 @@ void ABaseAINoiseTrapController::OnTargetDetected(AActor* Actor, FAIStimulus Sti
 	}
 }
 
-void ABaseAINoiseTrapController::OnPossess(APawn* InPawn)
+void ANoiseTrapController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 	if(IsValid(BT.Get()))
