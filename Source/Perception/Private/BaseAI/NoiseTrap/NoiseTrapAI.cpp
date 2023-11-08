@@ -29,6 +29,18 @@ void ANoiseTrapAI::SetupStimulusSource()
 
 void ANoiseTrapAI::ReportNoise(USoundBase* SoundToPlay, float Volume)
 {
+
+	/*
+	If you're working in C++, you can modify the sound volume programmatically.
+	Assuming you have a reference to the USoundBase or USoundCue you're playing, you can use the SetVolumeMultiplier method to change the volume
+
+	float NewVolume = 0.5f; // Set the new volume multiplier (0.5 for half volume)
+	YourSoundCue->SetVolumeMultiplier(NewVolume);
+
+	The above code sets the volume multiplier to 0.5, effectively reducing the volume to half of its original value.
+	You can call this method as needed during runtime to change the volume.
+	*/
+	
 	if(SoundToPlay)
 	{
 		// Plays the actual sound

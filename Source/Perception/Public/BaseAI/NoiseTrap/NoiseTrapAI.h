@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/Character.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "NoiseTrapAI.generated.h"
@@ -16,6 +17,9 @@ public:
 	// Sets default values for this character's properties
 	ANoiseTrapAI();
 
+	UPROPERTY(EditAnywhere)
+	FGameplayTag NoiseTrapTag; 
+	
 	// Used as a generator for the pawn to emit a stimuli. Need this as the AI will use this as a tool to percept.
 	UPROPERTY()
 	UAIPerceptionStimuliSourceComponent* StimuliSourcePredator;
