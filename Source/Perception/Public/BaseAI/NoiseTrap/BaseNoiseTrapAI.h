@@ -3,7 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "GameFramework/Character.h"
+#include "Perception/AISenseConfig_Hearing.h"
+#include "Perception/AISenseConfig_Sight.h"
 #include "BaseNoiseTrapAI.generated.h"
 
 UCLASS()
@@ -14,10 +17,12 @@ class PERCEPTION_API ABaseNoiseTrapAI : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ABaseNoiseTrapAI();
+	
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
 
 public:	
 	// Called every frame
