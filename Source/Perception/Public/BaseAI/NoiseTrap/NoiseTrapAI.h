@@ -17,8 +17,8 @@ public:
 	// Sets default values for this character's properties
 	ANoiseTrapAI();
 
-	UPROPERTY(EditAnywhere)
-	FGameplayTag NoiseTrapTag; 
+	/*UPROPERTY(EditAnywhere)
+	FGameplayTag NoiseTrapTag; */
 	
 	// Used as a generator for the pawn to emit a stimuli. Need this as the AI will use this as a tool to percept.
 	UPROPERTY()
