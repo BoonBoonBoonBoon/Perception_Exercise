@@ -57,7 +57,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UPawnNoiseEmitterComponent* NoiseEmitter;
 
-
+	// Use it to change the volume from crouching to running to sprinting 
+	float VolumeOutput;
 
 	
 	void MoveForward(float value);

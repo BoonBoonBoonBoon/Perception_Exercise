@@ -13,7 +13,13 @@ ANoiseTrapAI::ANoiseTrapAI()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	NoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("PawnNoiseEmitter");
+	NoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("PawnNoiseEmitter"));
+	
+	/*FGameplayTagContainer Noises;
+	Noises.AddTag(FGameplayTag::RequestGameplayTag("Player Footsteps"));
+	Noises.AddTag(FGameplayTag::RequestGameplayTag("AI Footsteps"));
+	*/
+
 }
 
 void ANoiseTrapAI::SetupStimulusSource()

@@ -94,6 +94,7 @@ void APerceptionCharacter::MoveForward(float value)
 {
 	if (value != 0)
 	{
+		VolumeOutput = 1.f;
 		AddMovementInput(GetActorForwardVector(), value);
 	}
 }
