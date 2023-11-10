@@ -31,6 +31,17 @@ public:
 	// Pawn on possess	
 	virtual void OnPossess(APawn* InPawn) override;
 
+protected:
+	//DBA
+	FGenericTeamId TeamId;
+	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
+
+public:
+	virtual FGenericTeamId GetGenericTeamId() const override {return TeamId;};
+
+	UPROPERTY(EditAnywhere)
+	class ANoiseTrapAI* Agent;
+	
 	
 	// Behaviour Tree and Blackboard Components
 	UPROPERTY(EditAnywhere)

@@ -18,6 +18,22 @@ public:
 	// Sets default values for this character's properties
 	ANoiseTrapAI();
 
+	// Team ID
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	int32 ID = 0;
+
+	// Get Team Id
+	virtual FGenericTeamId GetGenericTeamId() const override {return TeamId;};
+
+protected:
+
+	// Team ID
+	FGenericTeamId TeamId;
+
+
+	
+public:
+	
 	/*UPROPERTY(EditAnywhere)
 	FGameplayTag NoiseTrapTag; */
 	

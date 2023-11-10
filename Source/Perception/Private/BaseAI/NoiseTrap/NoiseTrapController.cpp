@@ -3,6 +3,7 @@
 
 #include "BaseAI/NoiseTrap/NoiseTrapController.h"
 
+#include "BaseAI/NoiseTrap/NoiseTrapAI.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/AIPerceptionComponent.h"
@@ -15,6 +16,14 @@ ANoiseTrapController::ANoiseTrapController(FObjectInitializer const& ObjectIniti
 	BBComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
 
 	setupInit();
+
+	ANoiseTrapAI* CheckSelf = Cast<ANoiseTrapAI>(GetPawn());
+	if(CheckSelf)
+	{
+		Agent = CheckSelf;
+		TeamId = FGenericTeamId(Agent->ID);
+	}
+	
 }
 
 void ANoiseTrapController::BeginPlay()
@@ -108,4 +117,26 @@ void ANoiseTrapController::OnPossess(APawn* InPawn)
 			Blackboard->InitializeBlackboard((*BT.Get()->BlackboardAsset));
 		}
 	}
+}
+
+ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& Other) const
+{
+	//return Super::GetTeamAttitudeTowards(Other);
+
+	// check if Actor is a pawn
+	const APawn* OtherPawn = Cast<APawn>(&Other);
+	if (OtherPawn == nullptr)
+	{
+		return ETeamAttitude::Neutral;
+	}
+
+	// Check if Actor implements GenericTeamAgentInterface (If its a bot or player)
+	auto PlayerIT = Cast<IGenericTeamAgentInterface>(&Other);
+	class IGenericTeamAgentInterface* BotIT = Cast<IGenericTeamAgentInterface>(OtherPawn->GetController());
+	if(BotIT == nullptr && PlayerIT == nullptr)
+	{
+		return ETeamAttitude::Neutral;
+	}
+
+	
 }
