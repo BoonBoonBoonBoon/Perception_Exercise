@@ -4,12 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "GenericTeamAgentInterface.h"
 #include "GameFramework/Character.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "NoiseTrapAI.generated.h"
 
 UCLASS()
-class PERCEPTION_API ANoiseTrapAI : public ACharacter
+class PERCEPTION_API ANoiseTrapAI : public ACharacter, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
