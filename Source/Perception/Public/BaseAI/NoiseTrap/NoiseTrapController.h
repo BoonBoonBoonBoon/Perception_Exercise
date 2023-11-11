@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "NoiseTrapAI.h"
+#include "NoiseTrapAI.h" 	
+#include "Perception/AIPerceptionListenerInterface.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AISenseConfig_Sight.h"
@@ -16,6 +17,7 @@
  */
 UCLASS(Blueprintable)
 class PERCEPTION_API ANoiseTrapController : public AAIController, public IAISightTargetInterface
+                                            
 {
 	GENERATED_BODY()
 

@@ -57,7 +57,14 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	class ANoiseTrapAI* Agent;
+
+	// Boolean used to check if actor should react (Check BTTask MoveToNoise)
+	bool ShouldReactToNoise(AActor* NoiseInstigator) const;
+
+					//*****//
+	
 private:
+	// Waypoint Finding
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess = "true"))
 	int CurrentWayPoint;
 	

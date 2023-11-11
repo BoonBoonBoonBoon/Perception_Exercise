@@ -6,6 +6,7 @@
 #include "BaseAI/PreyAI/PreyAIPawn.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "DSP/Osc.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/PerceptionCharacter.h"
 
@@ -197,4 +198,17 @@ ETeamAttitude::Type AChaseAiController::GetTeamAttitudeTowards(const AActor& Oth
 		return ETeamAttitude::Hostile;
 	}
 	
+}
+
+bool AChaseAiController::ShouldReactToNoise(AActor* NoiseInstigator) const
+{
+	if(NoiseInstigator)
+	{
+		if(ActorHasTag(TEXT("NoiseTrap")))
+		{
+			return true;
+		}
+	}
+	
+	return false;
 }
