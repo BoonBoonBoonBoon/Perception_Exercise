@@ -90,6 +90,8 @@ void APerceptionCharacter::ReportNoise(USoundBase* SoundToPlay, float Volume)
 	}
 }
 
+
+
 void APerceptionCharacter::MoveForward(float value)
 {
 	if (value != 0)

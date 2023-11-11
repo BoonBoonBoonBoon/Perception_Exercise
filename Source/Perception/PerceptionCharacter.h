@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GenericTeamAgentInterface.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "Components/SphereComponent.h"
@@ -10,7 +11,8 @@
 
 
 UCLASS(config=Game)
-class APerceptionCharacter : public ACharacter
+class APerceptionCharacter : public ACharacter, public IGenericTeamAgentInterface
+
 {
 	GENERATED_BODY()
 
@@ -61,6 +63,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Volume)
 	float VolumeOutput;
 
+	// Returns the Team ID
+	virtual FGenericTeamId GetGenericTeamId() const override {return FGenericTeamId(TeamId);};
+	FGenericTeamId TeamId = 1;
+	
 	
 	void MoveForward(float value);
 	void MoveSide(float Value);

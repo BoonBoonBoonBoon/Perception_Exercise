@@ -17,13 +17,15 @@ ANoiseTrapController::ANoiseTrapController(FObjectInitializer const& ObjectIniti
 
 	setupInit();
 
+	// Gets Pawn class 
 	ANoiseTrapAI* CheckSelf = Cast<ANoiseTrapAI>(GetPawn());
-	if(CheckSelf)
+	if (CheckSelf)
 	{
+		// Assigns Pawn class to agent
 		Agent = CheckSelf;
+		// Assigns the ID to Teamid to be used as an identifier
 		TeamId = FGenericTeamId(Agent->ID);
 	}
-	
 }
 
 void ANoiseTrapController::BeginPlay()
@@ -44,7 +46,7 @@ void ANoiseTrapController::setupInit()
 {
 	// SubObject for Sight 
 	Config_Sight = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight Config");
-	
+
 	// Sight Config // 
 	SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
 	if (Config_Sight)
@@ -57,13 +59,12 @@ void ANoiseTrapController::setupInit()
 		Config_Sight->DetectionByAffiliation.bDetectEnemies = true;
 		Config_Sight->DetectionByAffiliation.bDetectFriendlies = true;
 		Config_Sight->DetectionByAffiliation.bDetectNeutrals = true;
-		
+
 		// SubObject for Hearing
 		Config_Hearing = CreateDefaultSubobject<UAISenseConfig_Hearing>("Hearing Config");
 
 		if (Config_Hearing)
 		{
-
 			Config_Hearing->HearingRange = 800.f;
 			Config_Hearing->SetMaxAge(0.f);
 			Config_Hearing->DetectionByAffiliation.bDetectEnemies = true;
@@ -82,23 +83,20 @@ void ANoiseTrapController::setupInit()
 void ANoiseTrapController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 {
 	// (Delegate Call) When a pawn enters the sight of current AI, if it has stimulus it will decide on how to react.
-	if(auto const Predator = Cast<APerceptionCharacter>(Actor))
+	if (auto const Predator = Cast<APerceptionCharacter>(Actor))
 	{
-		if(Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Hearing>())
+		if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Hearing>())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("ALERT CAN HEAR PLAYER!") );
+			UE_LOG(LogTemp, Warning, TEXT("ALERT CAN HEAR PLAYER!"));
 			// Tells Blackboard that we want to make a new boolean with the key name CanSeePrey, 
 			GetBlackboardComponent()->SetValueAsBool("CanSeePredator", Stimulus.WasSuccessfullySensed());
 			// OR, instead of a boolean we Assign a specific actor as a key (In this case a BBPrey).
 			Blackboard->SetValueAsObject(BBHearPlayerKey, Actor);
 		}
-	} else if (auto const Player = Cast<APerceptionCharacter>(Actor))
-	{
-		if(Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Sight>()){
-			UE_LOG(LogTemp, Warning, TEXT("ALERT CAN SEE PLAYER!!") );
-			// Tells Blackboard that we want to make a new boolean with the key name CanSeePrey, 
+		else if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Sight>())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("ALERT CAN SEE PLAYER!!"))
 			GetBlackboardComponent()->SetValueAsBool("CanSeePredator", Stimulus.WasSuccessfullySensed());
-			// OR, instead of a boolean we Assign a specific actor as a key (In this case a BBPrey).
 			Blackboard->SetValueAsObject(BBSeePlayerKey, Actor);
 		}
 	}
@@ -107,10 +105,10 @@ void ANoiseTrapController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 void ANoiseTrapController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	if(IsValid(BT.Get()))
+	if (IsValid(BT.Get()))
 	{
 		// Check is BlackBoard comp is valid.
-		if(IsValid(Blackboard.Get()))
+		if (IsValid(Blackboard.Get()))
 		{
 			// boolean that checks if blackboard is initilaized.
 			// Get the blackboard asset for the Behaviour Tree. 
@@ -122,6 +120,8 @@ void ANoiseTrapController::OnPossess(APawn* InPawn)
 ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& Other) const
 {
 	//return Super::GetTeamAttitudeTowards(Other);
+	//UE_LOG(LogTemp, Warning, TEXT("TeamId of Other Actor: %d"), OtherActorTeamId.GetId());
+
 
 	// check if Actor is a pawn
 	const APawn* OtherPawn = Cast<APawn>(&Other);
@@ -133,10 +133,10 @@ ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& O
 	// Check if Actor implements GenericTeamAgentInterface (If its a bot or player)
 	auto PlayerIT = Cast<IGenericTeamAgentInterface>(&Other);
 	class IGenericTeamAgentInterface* BotIT = Cast<IGenericTeamAgentInterface>(OtherPawn->GetController());
-	if(BotIT == nullptr && PlayerIT == nullptr)
+	if (BotIT == nullptr && PlayerIT == nullptr)
 	{
 		return ETeamAttitude::Neutral;
 	}
 
-	
+	return {};
 }
