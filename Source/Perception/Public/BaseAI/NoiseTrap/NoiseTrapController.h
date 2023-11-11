@@ -4,16 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "NoiseTrapAI.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AISightTargetInterface.h"
 #include "NoiseTrapController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PERCEPTION_API ANoiseTrapController : public AAIController
+class PERCEPTION_API ANoiseTrapController : public AAIController, public IAISightTargetInterface
 {
 	GENERATED_BODY()
 
@@ -34,6 +36,7 @@ public:
 protected:
 	//DBA
 	FGenericTeamId TeamId;
+	
 	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
 
 public:

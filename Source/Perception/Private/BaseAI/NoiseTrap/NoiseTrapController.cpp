@@ -17,15 +17,7 @@ ANoiseTrapController::ANoiseTrapController(FObjectInitializer const& ObjectIniti
 
 	setupInit();
 
-	// Gets Pawn class 
-	ANoiseTrapAI* CheckSelf = Cast<ANoiseTrapAI>(GetPawn());
-	if (CheckSelf)
-	{
-		// Assigns Pawn class to agent
-		Agent = CheckSelf;
-		// Assigns the ID to Teamid to be used as an identifier
-		TeamId = FGenericTeamId(Agent->ID);
-	}
+
 }
 
 void ANoiseTrapController::BeginPlay()
@@ -40,6 +32,21 @@ void ANoiseTrapController::BeginPlay()
 		// Then Run the BTComponent using the BT Asset.
 		BTComp->StartTree(*BT.Get());
 	};
+	// Gets Pawn class 
+	ANoiseTrapAI* CheckSelf = Cast<ANoiseTrapAI>(GetPawn());
+	if (CheckSelf)
+	{
+		// Assigns Pawn class to agent
+		Agent = CheckSelf;
+		// Log a warning message with ID
+		FString DebugMessage = FString::Printf(TEXT("CheckSelfTRUE. ID: %d"), Agent->ID);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, DebugMessage);
+		// Log a warning message with ID
+		UE_LOG(LogTemp, Warning, TEXT("CheckSelfTRUE. ID: %d"), Agent->ID);
+		
+		// Assigns the ID to Teamid to be used as an identifier
+		TeamId = FGenericTeamId(Agent->ID);
+	}
 }
 
 void ANoiseTrapController::setupInit()
@@ -83,20 +90,28 @@ void ANoiseTrapController::setupInit()
 void ANoiseTrapController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 {
 	// (Delegate Call) When a pawn enters the sight of current AI, if it has stimulus it will decide on how to react.
-	if (auto const Predator = Cast<APerceptionCharacter>(Actor))
+	if (auto const Player = Cast<APerceptionCharacter>(Actor))
 	{
 		if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Hearing>())
 		{
 			UE_LOG(LogTemp, Warning, TEXT("ALERT CAN HEAR PLAYER!"));
+
 			// Tells Blackboard that we want to make a new boolean with the key name CanSeePrey, 
 			GetBlackboardComponent()->SetValueAsBool("CanSeePredator", Stimulus.WasSuccessfullySensed());
+
 			// OR, instead of a boolean we Assign a specific actor as a key (In this case a BBPrey).
 			Blackboard->SetValueAsObject(BBHearPlayerKey, Actor);
 		}
 		else if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Sight>())
 		{
+			UE_LOG(LogTemp, Warning, TEXT("TeamId of Agent: %d"), TeamId.GetId());
+
 			UE_LOG(LogTemp, Warning, TEXT("ALERT CAN SEE PLAYER!!"))
+
+			
+			
 			GetBlackboardComponent()->SetValueAsBool("CanSeePredator", Stimulus.WasSuccessfullySensed());
+
 			Blackboard->SetValueAsObject(BBSeePlayerKey, Actor);
 		}
 	}
@@ -117,6 +132,27 @@ void ANoiseTrapController::OnPossess(APawn* InPawn)
 	}
 }
 
+ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& Other) const
+{
+	return Super::GetTeamAttitudeTowards(Other);
+}
+
+
+
+
+/*
+ANoiseTrapAI* CheckSelf = Cast<ANoiseTrapAI>(GetPawn());
+if (CheckSelf)
+{
+	// Assigns Pawn class to agent
+	Agent = CheckSelf;
+	// Assigns the ID to Teamid to be used as an identifier
+	TeamId = FGenericTeamId(Agent->ID);
+}
+*/
+
+
+/*
 ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& Other) const
 {
 	//return Super::GetTeamAttitudeTowards(Other);
@@ -140,3 +176,4 @@ ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& O
 
 	return {};
 }
+*/

@@ -7,10 +7,11 @@
 #include "GenericTeamAgentInterface.h"
 #include "GameFramework/Character.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISightTargetInterface.h"
 #include "NoiseTrapAI.generated.h"
 
 UCLASS()
-class PERCEPTION_API ANoiseTrapAI : public ACharacter, public IGenericTeamAgentInterface
+class PERCEPTION_API ANoiseTrapAI : public ACharacter, public IAISightTargetInterface, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -28,7 +29,7 @@ public:
 protected:
 
 	// Team ID
-	FGenericTeamId TeamId;
+	FGenericTeamId TeamId = 2;
 
 
 	
