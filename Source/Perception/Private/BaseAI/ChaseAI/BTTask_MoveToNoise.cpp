@@ -3,7 +3,10 @@
 
 #include "BaseAI/ChaseAI/BTTask_MoveToNoise.h"
 
+#include "NavigationSystem.h"
+#include "BaseAI/ChaseAI/ChaseAI.h"
 #include "BaseAI/ChaseAI/ChaseAiController.h"
+#include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Perception/AIPerceptionComponent.h"
 
 UBTTask_MoveToNoise::UBTTask_MoveToNoise()
@@ -29,10 +32,30 @@ EBTNodeResult::Type UBTTask_MoveToNoise::ExecuteTask(UBehaviorTreeComponent& Own
 			// Loops through all the actors that the ai has Heard 
 			for (AActor* PercivedActor : PercivedActors)
 			{
-				if(Controller->ShouldReactToNoise)
+				//  may want to implement different logic here to determine which noise to react to
+				if(Controller->ShouldReactToNoise(PercivedActor))
+				{
+					// Retrieve information about the perceived noise
+					FVector NoiseLocation = PercivedActor->GetActorLocation();
+					
+					/*
+					FVector NoiseLocation;
+					float NoiseVolume;
+					// doesnt Work
+					//PerceptionComponent->GetNoiseInfo(PerceivedActor, NoiseLocation, NoiseVolume);
+					*/
+
+					AChaseAI* ChaseAi = Cast<AChaseAI>(Controller->GetPawn());
+					if(ChaseAi)
+					{
+						// Move the AI to the noise location using SimpleMoveToLocation
+						UAIBlueprintHelperLibrary::SimpleMoveToLocation(Controller, NoiseLocation);
+					}
+					return EBTNodeResult::Succeeded;
+				}
 			}
 		}
 	}
+	return EBTNodeResult::Failed;
 	
-	return Super::ExecuteTask(OwnerComp, NodeMemory);
 }

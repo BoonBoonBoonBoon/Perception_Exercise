@@ -202,9 +202,12 @@ ETeamAttitude::Type AChaseAiController::GetTeamAttitudeTowards(const AActor& Oth
 
 bool AChaseAiController::ShouldReactToNoise(AActor* NoiseInstigator) const
 {
-	if(NoiseInstigator)
+	if (NoiseInstigator)
 	{
-		if(ActorHasTag(TEXT("NoiseTrap")))
+		// Might Have to change to Player I.E.
+		//return NoiseInstigator != nullptr && NoiseInstigator->IsA<APlayerCharacter>();
+
+		if (ActorHasTag(TEXT("NoiseTrap")))
 		{
 			return true;
 		}
