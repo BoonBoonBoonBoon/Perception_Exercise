@@ -136,6 +136,7 @@ ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& O
 	}
 
 	// For Testing, Print ActorBot TeamID.
+	/*
 	if(igtaiActorBot != nullptr)
 	{
 		FGenericTeamId fgtiActorBotTeamId = igtaiActorBot->GetGenericTeamId();
@@ -153,6 +154,7 @@ ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& O
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, fstrActorPlayerTeamid);
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *fstrActorPlayerTeamid);
 	}
+	*/
 	
 	// Gets the TeamID of the Actor (Bot or Player)
 	FGenericTeamId fgtiOtherActorTeamId = NULL;
