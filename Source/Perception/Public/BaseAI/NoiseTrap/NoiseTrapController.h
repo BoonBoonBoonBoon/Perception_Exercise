@@ -51,6 +51,13 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	class ANoiseTrapAI* Agent;
+
+	// Event for when the AI spots the player 
+	/*
+	UFUNCTION(BlueprintCallable, Category="Noise")
+	void MakeNoise(float Loudness);
+	*/
+
 	
 	//** Perception Components **// 
 	

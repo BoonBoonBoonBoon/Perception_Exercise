@@ -34,6 +34,10 @@ public:
 	// Emitter component used to emit the sound to nearby ai.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UPawnNoiseEmitterComponent* NoiseEmitter;
+
+	// Initalize Waypoints
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Waypoints")
+	TArray<AActor*> Waypoints;
 	
 protected:
 	// Called when the game starts or when spawned

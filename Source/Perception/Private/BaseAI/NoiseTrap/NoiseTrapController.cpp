@@ -182,9 +182,6 @@ ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& O
 
 }
 
-
-
-
 // Gets Pawn class 
 /*ANoiseTrapAI* CheckSelf = Cast<ANoiseTrapAI>(GetPawn());
 if (CheckSelf)

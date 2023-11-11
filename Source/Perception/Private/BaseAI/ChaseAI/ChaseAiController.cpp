@@ -13,6 +13,9 @@ AChaseAiController::AChaseAiController(FObjectInitializer const& ObjectInitializ
 {
 	BBComp = CreateDefaultSubobject<UBlackboardComponent>("BlackBoard");	
 	BTComp = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BTComp"));
+
+	// Assigns the controller a team
+	TeamId = FGenericTeamId(3);
 	
 	SetupInit();
 }
@@ -118,10 +121,80 @@ void AChaseAiController::BeginPlay()
 	// If the behaviour tree is valid
 	if (IsValid(BT.Get()))
 	{
+
+		Blackboard->SetValueAsInt("WaypointIndex", 0);
+		
 		// Run behaviour tree.
 		RunBehaviorTree(BT.Get());
 
 		// Then Run the BTComponent using the BT Asset.
 		BTComp->StartTree(*BT.Get());
 	};
+}
+
+ETeamAttitude::Type AChaseAiController::GetTeamAttitudeTowards(const AActor& Other) const
+{
+		// Checks if the actor is a pawn
+	auto OtherPawn = Cast<APawn>(&Other);
+	if(OtherPawn == nullptr)
+	{
+		return ETeamAttitude::Neutral;
+	}
+
+	// Check if Actor (Bot or Player) implements IGenericTeamAgentInterface.
+	auto igtaiActorBot = Cast<IGenericTeamAgentInterface>(OtherPawn->GetController());
+	auto igtaiActorPlayer = Cast<IGenericTeamAgentInterface>(&Other);
+	if(igtaiActorBot == nullptr && igtaiActorPlayer == nullptr)
+	{
+		return ETeamAttitude::Neutral;
+	}
+
+	// For Testing, Print ActorBot TeamID.
+	/*
+	if(igtaiActorBot != nullptr)
+	{
+		FGenericTeamId fgtiActorBotTeamId = igtaiActorBot->GetGenericTeamId();
+		int iActorBotTeamId = (int)fgtiActorBotTeamId;
+		FString fstrActorBotTeamId = FString::FromInt(iActorBotTeamId);
+		GEngine->AddOnScreenDebugMessage(-1,15.0f, FColor::Yellow, fstrActorBotTeamId);
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *fstrActorBotTeamId);
+	}
+	// For Testing, Print ActorPlayer TeamID
+	if(igtaiActorPlayer != nullptr)
+	{
+		FGenericTeamId fgtiActorPlayerTeamId = igtaiActorPlayer->GetGenericTeamId();
+		int iActorPlayerTeamId = (int)fgtiActorPlayerTeamId;
+		FString fstrActorPlayerTeamid = FString::FromInt(iActorPlayerTeamId);
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, fstrActorPlayerTeamid);
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *fstrActorPlayerTeamid);
+	}
+	*/
+	
+	// Gets the TeamID of the Actor (Bot or Player)
+	FGenericTeamId fgtiOtherActorTeamId = NULL;
+	if(igtaiActorBot != nullptr)
+	{
+		fgtiOtherActorTeamId = igtaiActorBot->GetGenericTeamId();
+	} else if (igtaiActorPlayer != nullptr)
+	{
+		fgtiOtherActorTeamId = igtaiActorPlayer->GetGenericTeamId();
+	}
+
+	// Determines ThisBot attitude towards the OtherActor (Bot or Player) as either Neutral, Friendly, or Hostile.
+	FGenericTeamId fgtiThisBotTeamId = this->GetGenericTeamId();
+	if(fgtiThisBotTeamId == 225) // They are not on a team;
+	{
+		return ETeamAttitude::Neutral;
+	} else if (fgtiThisBotTeamId == fgtiOtherActorTeamId) // They are on the same team
+	{
+		return ETeamAttitude::Friendly;
+	} else if(fgtiThisBotTeamId == 2) // NoiseTrap Team 
+	{
+		// Noise Trap makes sound ???
+		return ETeamAttitude::Neutral;
+	} else // they are on different teams
+	{
+		return ETeamAttitude::Hostile;
+	}
+	
 }

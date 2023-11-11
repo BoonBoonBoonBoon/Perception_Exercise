@@ -44,6 +44,22 @@ public:
 	UPROPERTY(EditAnywhere, Category="AI")
 	UEnvQuery *FindLocEQS;
 
+	//** Detection By Affiliation **// 
+	
+	// Assigns the Controller an id variable
+	FGenericTeamId TeamId;
+
+	// Returns Team ID
+	virtual FGenericTeamId GetGenericTeamId() const override {return TeamId;};
+
+	// Assign Teams and Reactions
+	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
+	
+	UPROPERTY(EditAnywhere)
+	class ANoiseTrapAI* Agent;
+private:
+	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess = "true"))
+	int CurrentWayPoint;
 	
 protected:
 	
