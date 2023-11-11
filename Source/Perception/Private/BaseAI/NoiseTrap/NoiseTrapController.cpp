@@ -34,6 +34,20 @@ void ANoiseTrapController::BeginPlay()
 		BTComp->StartTree(*BT.Get());
 	};
 }
+void ANoiseTrapController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+	if (IsValid(BT.Get()))
+	{
+		// Check is BlackBoard comp is valid.
+		if (IsValid(Blackboard.Get()))
+		{
+			// boolean that checks if blackboard is initilaized.
+			// Get the blackboard asset for the Behaviour Tree. 
+			Blackboard->InitializeBlackboard((*BT.Get()->BlackboardAsset));
+		}
+	}
+}
 
 void ANoiseTrapController::setupInit()
 {
@@ -102,24 +116,10 @@ void ANoiseTrapController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 	}
 }
 
-void ANoiseTrapController::OnPossess(APawn* InPawn)
-{
-	Super::OnPossess(InPawn);
-	if (IsValid(BT.Get()))
-	{
-		// Check is BlackBoard comp is valid.
-		if (IsValid(Blackboard.Get()))
-		{
-			// boolean that checks if blackboard is initilaized.
-			// Get the blackboard asset for the Behaviour Tree. 
-			Blackboard->InitializeBlackboard((*BT.Get()->BlackboardAsset));
-		}
-	}
-}
-
 ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& Other) const
 {
 
+	
 	// Checks if the actor is a pawn
 	auto OtherPawn = Cast<APawn>(&Other);
 	if(OtherPawn == nullptr)
@@ -135,6 +135,25 @@ ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& O
 		return ETeamAttitude::Neutral;
 	}
 
+	// For Testing, Print ActorBot TeamID.
+	if(igtaiActorBot != nullptr)
+	{
+		FGenericTeamId fgtiActorBotTeamId = igtaiActorBot->GetGenericTeamId();
+		int iActorBotTeamId = (int)fgtiActorBotTeamId;
+		FString fstrActorBotTeamId = FString::FromInt(iActorBotTeamId);
+		GEngine->AddOnScreenDebugMessage(-1,15.0f, FColor::Yellow, fstrActorBotTeamId);
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *fstrActorBotTeamId);
+	}
+	// For Testing, Print ActorPlayer TeamID
+	if(igtaiActorPlayer != nullptr)
+	{
+		FGenericTeamId fgtiActorPlayerTeamId = igtaiActorPlayer->GetGenericTeamId();
+		int iActorPlayerTeamId = (int)fgtiActorPlayerTeamId;
+		FString fstrActorPlayerTeamid = FString::FromInt(iActorPlayerTeamId);
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, fstrActorPlayerTeamid);
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *fstrActorPlayerTeamid);
+	}
+	
 	// Gets the TeamID of the Actor (Bot or Player)
 	FGenericTeamId fgtiOtherActorTeamId = NULL;
 	if(igtaiActorBot != nullptr)
@@ -147,8 +166,18 @@ ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& O
 
 	// Determines ThisBot attitude towards the OtherActor (Bot or Player) as either Neutral, Friendly, or Hostile.
 	FGenericTeamId fgtiThisBotTeamId = this->GetGenericTeamId();
+	if(fgtiThisBotTeamId == 225) // They are not on a team;
+	{
+		return ETeamAttitude::Neutral;
+	} else if (fgtiThisBotTeamId == fgtiOtherActorTeamId) // They are on the same team
+	{
+		return ETeamAttitude::Friendly;
+	} else // they are on different teams
+	{
+		return ETeamAttitude::Hostile;
+	}
 	
-	return Super::GetTeamAttitudeTowards(Other);
+
 }
 
 
