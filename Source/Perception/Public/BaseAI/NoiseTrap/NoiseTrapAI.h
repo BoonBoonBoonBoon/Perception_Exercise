@@ -19,17 +19,18 @@ public:
 	// Sets default values for this character's properties
 	ANoiseTrapAI();
 
-	// Team Number, this will be used to determine the groups
+	/*// Team Number, this will be used to determine the groups
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	int32 ID = 2;
 
 	// Get Team Id
 	virtual FGenericTeamId GetGenericTeamId() const override {return TeamId;};
+	*/
 
 protected:
 
 	// Team ID
-	FGenericTeamId TeamId = 2;
+//	FGenericTeamId TeamId = 2;
 
 
 	

@@ -63,9 +63,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Volume)
 	float VolumeOutput;
 
-	// Returns the Team ID
+	// Give character an ID and returns the ID
+	FGenericTeamId TeamId;
 	virtual FGenericTeamId GetGenericTeamId() const override {return FGenericTeamId(TeamId);};
-	FGenericTeamId TeamId = 1;
+	
 	
 	
 	void MoveForward(float value);

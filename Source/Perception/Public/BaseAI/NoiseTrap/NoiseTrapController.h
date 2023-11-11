@@ -14,37 +14,45 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class PERCEPTION_API ANoiseTrapController : public AAIController, public IAISightTargetInterface
 {
 	GENERATED_BODY()
 
 public:
-	
+
+	// Consturctor
 	ANoiseTrapController(FObjectInitializer const& ObjectInitializer);
-	
+
+	// Begin Play
 	virtual void BeginPlay() override;
 
+	// Setup Senses
 	void setupInit();
-	
+
+	// How to react to target
 	UFUNCTION()
 	void OnTargetDetected(AActor* Actor, FAIStimulus Stimulus);
 	
 	// Pawn on possess	
 	virtual void OnPossess(APawn* InPawn) override;
 
-protected:
-	//DBA
-	FGenericTeamId TeamId;
-	
-	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
 
-public:
+	//** Detection By Affiliation **// 
+	
+	// Assigns the Controller an id variable
+	FGenericTeamId TeamId;
+
+	// Returns Team ID
 	virtual FGenericTeamId GetGenericTeamId() const override {return TeamId;};
 
+	// Assign Teams and Reactions
+	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
+	
 	UPROPERTY(EditAnywhere)
 	class ANoiseTrapAI* Agent;
 	
+	//** Perception Components **// 
 	
 	// Behaviour Tree and Blackboard Components
 	UPROPERTY(EditAnywhere)

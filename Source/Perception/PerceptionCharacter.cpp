@@ -60,8 +60,12 @@ APerceptionCharacter::APerceptionCharacter()
 	Collision = CreateDefaultSubobject<USphereComponent>("Collision");
 	Collision->SetupAttachment(RootComponent);
 
-	// Noise Emitter
+	// Noise Emitter to make sound 
 	NoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("PawnNoiseEmitter"));
+
+	// Assigns the character to the team of 1
+	TeamId = FGenericTeamId(1);
+
 	
 }
 

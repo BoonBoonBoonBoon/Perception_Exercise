@@ -15,9 +15,10 @@ ANoiseTrapController::ANoiseTrapController(FObjectInitializer const& ObjectIniti
 	BTComp = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTreeComponent"));
 	BBComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
 
+	// Assigns the controller a team
+	TeamId = FGenericTeamId(2);
+	
 	setupInit();
-
-
 }
 
 void ANoiseTrapController::BeginPlay()
@@ -32,21 +33,6 @@ void ANoiseTrapController::BeginPlay()
 		// Then Run the BTComponent using the BT Asset.
 		BTComp->StartTree(*BT.Get());
 	};
-	// Gets Pawn class 
-	ANoiseTrapAI* CheckSelf = Cast<ANoiseTrapAI>(GetPawn());
-	if (CheckSelf)
-	{
-		// Assigns Pawn class to agent
-		Agent = CheckSelf;
-		// Log a warning message with ID
-		FString DebugMessage = FString::Printf(TEXT("CheckSelfTRUE. ID: %d"), Agent->ID);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, DebugMessage);
-		// Log a warning message with ID
-		UE_LOG(LogTemp, Warning, TEXT("CheckSelfTRUE. ID: %d"), Agent->ID);
-		
-		// Assigns the ID to Teamid to be used as an identifier
-		TeamId = FGenericTeamId(Agent->ID);
-	}
 }
 
 void ANoiseTrapController::setupInit()
@@ -106,9 +92,8 @@ void ANoiseTrapController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("TeamId of Agent: %d"), TeamId.GetId());
 
-			UE_LOG(LogTemp, Warning, TEXT("ALERT CAN SEE PLAYER!!"))
-
 			
+			UE_LOG(LogTemp, Warning, TEXT("ALERT CAN SEE PLAYER!!"))
 			
 			GetBlackboardComponent()->SetValueAsBool("CanSeePredator", Stimulus.WasSuccessfullySensed());
 
@@ -134,22 +119,56 @@ void ANoiseTrapController::OnPossess(APawn* InPawn)
 
 ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& Other) const
 {
+
+	// Checks if the actor is a pawn
+	auto OtherPawn = Cast<APawn>(&Other);
+	if(OtherPawn == nullptr)
+	{
+		return ETeamAttitude::Neutral;
+	}
+
+	// Check if Actor (Bot or Player) implements IGenericTeamAgentInterface.
+	auto igtaiActorBot = Cast<IGenericTeamAgentInterface>(OtherPawn->GetController());
+	auto igtaiActorPlayer = Cast<IGenericTeamAgentInterface>(&Other);
+	if(igtaiActorBot == nullptr && igtaiActorPlayer == nullptr)
+	{
+		return ETeamAttitude::Neutral;
+	}
+
+	// Gets the TeamID of the Actor (Bot or Player)
+	FGenericTeamId fgtiOtherActorTeamId = NULL;
+	if(igtaiActorBot != nullptr)
+	{
+		fgtiOtherActorTeamId = igtaiActorBot->GetGenericTeamId();
+	} else if (igtaiActorPlayer != nullptr)
+	{
+		fgtiOtherActorTeamId = igtaiActorPlayer->GetGenericTeamId();
+	}
+
+	// Determines ThisBot attitude towards the OtherActor (Bot or Player) as either Neutral, Friendly, or Hostile.
+	FGenericTeamId fgtiThisBotTeamId = this->GetGenericTeamId();
+	
 	return Super::GetTeamAttitudeTowards(Other);
 }
 
 
 
 
-/*
-ANoiseTrapAI* CheckSelf = Cast<ANoiseTrapAI>(GetPawn());
+// Gets Pawn class 
+/*ANoiseTrapAI* CheckSelf = Cast<ANoiseTrapAI>(GetPawn());
 if (CheckSelf)
 {
 	// Assigns Pawn class to agent
 	Agent = CheckSelf;
+	// Log a warning message with ID
+	FString DebugMessage = FString::Printf(TEXT("CheckSelfTRUE. ID: %d"), Agent->ID);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, DebugMessage);
+	// Log a warning message with ID
+	UE_LOG(LogTemp, Warning, TEXT("CheckSelfTRUE. ID: %d"), Agent->ID);
+		
 	// Assigns the ID to Teamid to be used as an identifier
 	TeamId = FGenericTeamId(Agent->ID);
-}
-*/
+}*/
 
 
 /*
