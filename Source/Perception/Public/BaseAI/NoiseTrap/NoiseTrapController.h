@@ -32,6 +32,13 @@ public:
 	// Setup Senses
 	void setupInit();
 
+	// Used to withhold repeated calls on sense
+	void TimeToSense();
+	FTimerHandle TimeToSenseHandle;
+	int SenseCall; // Time to count from.
+	bool bCanMakeNoise; // Checks if actor can make noise
+	bool bFirstNoise = true; // first time making noise, Once it makes a noise it will be false.
+	
 	// How to react to target
 	UFUNCTION()
 	void OnTargetDetected(AActor* Actor, FAIStimulus Stimulus);

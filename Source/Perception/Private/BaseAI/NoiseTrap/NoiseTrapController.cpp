@@ -22,6 +22,8 @@ ANoiseTrapController::ANoiseTrapController(FObjectInitializer const& ObjectIniti
 	// Give the Actor a Tag to identify it
 	Tags.Add(TEXT("NoiseTrap"));
 	setupInit();
+
+	SenseCall = 8;
 }
 
 void ANoiseTrapController::BeginPlay()
@@ -90,6 +92,29 @@ void ANoiseTrapController::setupInit()
 	}
 }
 
+void ANoiseTrapController::TimeToSense()
+{
+	if(!bCanMakeNoise)
+	{
+		// Decrements till 0
+		SenseCall--;
+		// Print the current countdown
+		UE_LOG(LogTemp, Warning, TEXT("Countdown: %d"), SenseCall);
+
+		if(SenseCall <= 0)
+		{
+			// Your action when the countdown reaches zero
+			UE_LOG(LogTemp, Warning, TEXT("Timer Cleared!"))
+
+			// Reset the countdown to 5 seconds for the next iteration
+			SenseCall = 8;
+			bCanMakeNoise = true;
+			GetWorldTimerManager().ClearTimer(TimeToSenseHandle);
+		}
+	}
+	return;
+}
+
 void ANoiseTrapController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 {
 	// (Delegate Call) When a pawn enters the sight of current AI, if it has stimulus it will decide on how to react.
@@ -97,34 +122,47 @@ void ANoiseTrapController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 	{
 		if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Hearing>())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("ALERT! - NOISETRAP CAN HEAR PLAYER!"));
-
 			// Tells Blackboard that we want to make a new boolean with the key name CanSeePrey, 
 			GetBlackboardComponent()->SetValueAsBool("CanSeePredator", Stimulus.WasSuccessfullySensed());
-
 			// OR, instead of a boolean we Assign a specific actor as a key (In this case a BBPrey).
 			Blackboard->SetValueAsObject(BBHearPlayerKey, Actor);
+
+			// FirstTime Making Noise
+			if (bFirstNoise)
+			{
+				Actor->MakeNoise(3.f, Agent, Actor->GetActorLocation());
+				UE_LOG(LogTemp, Warning, TEXT("MakeNoise called for the first time, with (Hearing) loudness 3.0f at location %s"), *Actor->GetActorLocation().ToString());
+				bFirstNoise = false;
+				bCanMakeNoise = true;
+			} else if(bCanMakeNoise && !bFirstNoise)
+			{
+				bCanMakeNoise = false;
+				Actor->MakeNoise(3.f, Agent, Actor->GetActorLocation());
+				UE_LOG(LogTemp, Warning, TEXT("MakeNoise called for the Second time, with (Hearing) loudness 3.0f at location %s"), *Actor->GetActorLocation().ToString());
+				GetWorldTimerManager().SetTimer(TimeToSenseHandle, this, &ANoiseTrapController::TimeToSense, 1.f, true);
+			}
 		}
-		else if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Sight>())
+		/*else if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Sight>())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("TeamId of Agent: %d"), TeamId.GetId());
-
-
-			UE_LOG(LogTemp, Warning, TEXT("ALERT! - NOISETRAP CAN SEE PLAYER!!"))
-
 			GetBlackboardComponent()->SetValueAsBool("CanSeePredator", Stimulus.WasSuccessfullySensed());
-
 			Blackboard->SetValueAsObject(BBSeePlayerKey, Actor);
 
-			Actor->MakeNoise(3.f, Agent, Actor->GetActorLocation());
-			//Agent->MakeNoise(3.f, Agent, Agent->GetActorLocation());
-			// Log a message indicating that MakeNoise has been called
-			UE_LOG(LogTemp, Warning, TEXT("MakeNoise called with loudness 3.0f at location %s"),
-			       *Actor->GetActorLocation().ToString());
-		}
+			// First Time Making Noise
+			if (bFirstNoise)
+			{
+				Actor->MakeNoise(3.f, Agent, Actor->GetActorLocation());
+				bFirstNoise = false;
+			}
+		}*/
 	}
 }
 
+//UE_LOG(LogTemp, Warning, TEXT("TeamId of Agent: %d"), TeamId.GetId());
+//UE_LOG(LogTemp, Warning, TEXT("ALERT! - NOISETRAP CAN SEE PLAYER!!"))
+//Agent->MakeNoise(3.f, Agent, Agent->GetActorLocation());
+// Log a message indicating that MakeNoise has been called
+//UE_LOG(LogTemp, Warning, TEXT("MakeNoise called with (Sight) loudness 3.0f at location %s"),
+// *Actor->GetActorLocation().ToString());
 
 ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& Other) const
 {
@@ -191,6 +229,24 @@ ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& O
 	
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Gets Pawn class 
 /*ANoiseTrapAI* CheckSelf = Cast<ANoiseTrapAI>(GetPawn());

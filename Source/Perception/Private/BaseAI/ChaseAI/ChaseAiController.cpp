@@ -30,7 +30,7 @@ void AChaseAiController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimu
 	{
 		if(Stimulus.WasSuccessfullySensed())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can Sense Player")); // Log that AI Senses player
+			//UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can Sense Player")); // Log that AI Senses player
 			GetBlackboardComponent()->SetValueAsBool("SensedPlayer", Stimulus.WasSuccessfullySensed());
 		}
 		
@@ -41,7 +41,7 @@ void AChaseAiController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimu
 		}
 			else if(Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Hearing>()) // If the Stimulus type was sight
 		{
-				UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can See Player")); // Log that AI sees player
+			//	UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can See Player")); // Log that AI sees player
 				GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed()); // Set The boolean Value in BB to true if was sensed.
 		}
 	}
