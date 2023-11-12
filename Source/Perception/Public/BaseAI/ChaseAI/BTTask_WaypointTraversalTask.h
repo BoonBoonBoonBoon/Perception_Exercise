@@ -21,6 +21,6 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere, Category = "AI")
-	FName WaypointKey;
+	FName WaypointKey = FName("WaypointKey");
 	
 };
