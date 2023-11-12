@@ -3,6 +3,7 @@
 
 #include "BaseAI/ChaseAI/ChaseAiController.h"
 
+#include "BaseAI/NoiseTrap/NoiseTrapAI.h"
 #include "BaseAI/PreyAI/PreyAIPawn.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -37,7 +38,7 @@ void AChaseAiController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimu
 			UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can Hear Player")); // Log that AI Hears player
 			GetBlackboardComponent()->SetValueAsBool("HeardNoise", Stimulus.WasSuccessfullySensed()); // Set The boolean Value in BB to true if was sensed.
 		}
-			else if(Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Hearing>()) // If the Stimulus type was sight
+			else if(Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Sight>()) // If the Stimulus type was sight
 		{
 				UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can See Player")); // Log that AI sees player
 				GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed()); // Set The boolean Value in BB to true if was sensed.
@@ -72,14 +73,35 @@ void AChaseAiController::OnHearNoise(AActor* ActorInstigator, const FVector& Loc
 {
 	//if();
 }
+
+
 bool AChaseAiController::ShouldReactToNoise(AActor* NoiseInstigator) const
 {
 	if (NoiseInstigator)
 	{
 		// Might Have to change to Player I.E.
 		//return NoiseInstigator != nullptr && NoiseInstigator->IsA<APlayerCharacter>();
+		if (auto const Trap = Cast<ANoiseTrapAI>(NoiseInstigator))
+		{
+			return true;
+		}
+		else if (auto const Player = Cast<APerceptionCharacter>(NoiseInstigator))
+		{
+			return true;
+		}
+	}
+	return false;
+}
 
-		if (ActorHasTag(TEXT("NoiseTrap")))
+bool AChaseAiController::ShouldReactToSight(AActor* SightInstigator) const
+{
+	if (SightInstigator)
+	{
+		if (auto const Trap = Cast<ANoiseTrapAI>(SightInstigator))
+		{
+			return false;
+		}
+		if (auto const trap = Cast<APerceptionCharacter>(SightInstigator))
 		{
 			return true;
 		}

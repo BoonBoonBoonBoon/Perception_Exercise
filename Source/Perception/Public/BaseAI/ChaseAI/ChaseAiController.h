@@ -61,6 +61,9 @@ public:
 	// Boolean used to check if actor should react (Check BTTask MoveToNoise)
 	bool ShouldReactToNoise(AActor* NoiseInstigator) const;
 
+	// Boolean used to check if actor should react (Check BTTask MoveToSight
+	bool ShouldReactToSight(AActor* SightInstigator) const;
+	
 					//*****//
 	
 private:
