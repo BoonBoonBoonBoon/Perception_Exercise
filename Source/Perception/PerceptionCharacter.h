@@ -66,12 +66,16 @@ public:
 	// Give character an ID and returns the ID
 	FGenericTeamId TeamId;
 	virtual FGenericTeamId GetGenericTeamId() const override {return FGenericTeamId(TeamId);};
-	
-	
-	
+
 	void MoveForward(float value);
 	void MoveSide(float Value);
 
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	bool bCrouching;
+
+	void StartCrouch();
+	void StopCrouch();
 	
 protected:
 

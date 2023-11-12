@@ -24,8 +24,6 @@ AChaseAiController::AChaseAiController(FObjectInitializer const& ObjectInitializ
 void AChaseAiController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
 {
 	// (Delegate Call) When a pawn enters the sight of current AI, if it has stimulus it will decide on how to react.
-
-	
 	if (auto const Player = Cast<APerceptionCharacter>(Actor)) // If Actor is Player Class
 	{
 		if(Stimulus.WasSuccessfullySensed())
@@ -41,7 +39,7 @@ void AChaseAiController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimu
 		}
 			else if(Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Hearing>()) // If the Stimulus type was sight
 		{
-			//	UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can See Player")); // Log that AI sees player
+				UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can See Player")); // Log that AI sees player
 				GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed()); // Set The boolean Value in BB to true if was sensed.
 		}
 	}
@@ -123,7 +121,7 @@ void AChaseAiController::SetupInit()
 		SightConfig->SightRadius = 600.f;
 		SightConfig->LoseSightRadius = SightConfig->SightRadius + 50.f;
 		SightConfig->PeripheralVisionAngleDegrees = 45.f;
-		SightConfig->SetMaxAge(5.f);
+		SightConfig->SetMaxAge(2.0f);
 
 		// Sets AI to continue seeing pawn detected location if it still remains within a local area.
 		SightConfig->AutoSuccessRangeFromLastSeenLocation = 800.f;
@@ -136,7 +134,7 @@ void AChaseAiController::SetupInit()
 		{
 
 			HearingConfig->HearingRange = 900.f;
-			HearingConfig->SetMaxAge(3.f);
+			HearingConfig->SetMaxAge(1.0f);
 			HearingConfig->DetectionByAffiliation.bDetectEnemies = true;
 			HearingConfig->DetectionByAffiliation.bDetectFriendlies = true;
 			HearingConfig->DetectionByAffiliation.bDetectNeutrals = true;

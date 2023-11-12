@@ -94,8 +94,6 @@ void APerceptionCharacter::ReportNoise(USoundBase* SoundToPlay, float Volume)
 	}
 }
 
-
-
 void APerceptionCharacter::MoveForward(float value)
 {
 	if (value != 0)
@@ -113,6 +111,27 @@ void APerceptionCharacter::MoveSide(float Value)
 	}
 }
 
+void APerceptionCharacter::StartCrouch()
+{
+	/*UE_LOG(LogTemp, Warning, TEXT("Crouch"));
+	bIsCrouched = true;
+	if(bIsCrouched)
+	{
+		Crouch();
+		GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
+	}*/
+}
+
+void APerceptionCharacter::StopCrouch()
+{
+	/*UE_LOG(LogTemp, Warning, TEXT("unCrouch"));
+	bIsCrouched = false;
+	if(!bIsCrouched)
+	{
+		UnCrouch();	
+	}*/
+}
+
 void APerceptionCharacter::OnBeginOverlap(UPrimitiveComponent* OverlapComponent, AActor* OtherActor,
                                           UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -125,7 +144,8 @@ void APerceptionCharacter::OnBeginOverlap(UPrimitiveComponent* OverlapComponent,
 		}
 	}
 
-
+	// Log the value of bCrouching
+	UE_LOG(LogTemp, Warning, TEXT("bCrouching: %s"), bCrouching ? TEXT("True") : TEXT("False"));
 	
 }
 
@@ -156,6 +176,10 @@ void APerceptionCharacter::Tick(float DeltaSeconds)
 
 void APerceptionCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
+
+	PlayerInputComponent->BindAction("Crouching", IE_Pressed,this, &APerceptionCharacter::StartCrouch);
+	PlayerInputComponent->BindAction("Crouching", IE_Released,this, &APerceptionCharacter::StopCrouch);
+	
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
