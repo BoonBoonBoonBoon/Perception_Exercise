@@ -65,8 +65,8 @@ APerceptionCharacter::APerceptionCharacter()
 
 	// Assigns the character to the team of 1
 	TeamId = FGenericTeamId(1);
-
-	
+	VolumeOutput = 1.f;
+	Tags.Add(TEXT("Player"));
 }
 
 // Stim for ai

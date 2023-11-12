@@ -24,7 +24,33 @@ AChaseAiController::AChaseAiController(FObjectInitializer const& ObjectInitializ
 void AChaseAiController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
 {
 	// (Delegate Call) When a pawn enters the sight of current AI, if it has stimulus it will decide on how to react.
-	if(auto const Prey = Cast<APreyAIPawn>(Actor))
+
+	
+	if (auto const Player = Cast<APerceptionCharacter>(Actor)) // If Actor is Player Class
+	{
+		if(Stimulus.WasSuccessfullySensed())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can Sense Player")); // Log that AI Senses player
+			GetBlackboardComponent()->SetValueAsBool("SensedPlayer", Stimulus.WasSuccessfullySensed());
+		}
+		
+		if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Hearing>()) // If the Stimulus Type was Noise
+		{
+			UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can Hear Player")); // Log that AI Hears player
+			GetBlackboardComponent()->SetValueAsBool("HeardNoise", Stimulus.WasSuccessfullySensed()); // Set The boolean Value in BB to true if was sensed.
+		}
+			else if(Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Hearing>()) // If the Stimulus type was sight
+		{
+				UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can See Player")); // Log that AI sees player
+				GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed()); // Set The boolean Value in BB to true if was sensed.
+		}
+	}
+
+
+
+
+	
+	/*if(auto const Prey = Cast<APreyAIPawn>(Actor))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Prey!") );
 		// Tells Blackboard that we want to make a new boolean with the key name CanSeePrey, 
@@ -41,14 +67,27 @@ void AChaseAiController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimu
 		{
 			OnHearNoise(Actor, Actor->GetActorLocation(), 1);
 		}
-	}
+	}*/
 }
 
 void AChaseAiController::OnHearNoise(AActor* ActorInstigator, const FVector& Location,float Volume)
 {
 	//if();
 }
+bool AChaseAiController::ShouldReactToNoise(AActor* NoiseInstigator) const
+{
+	if (NoiseInstigator)
+	{
+		// Might Have to change to Player I.E.
+		//return NoiseInstigator != nullptr && NoiseInstigator->IsA<APlayerCharacter>();
 
+		if (ActorHasTag(TEXT("NoiseTrap")))
+		{
+			return true;
+		}
+	}
+	return false;
+}
 
 void AChaseAiController::OnPossess(APawn* InPawn)
 {
@@ -200,18 +239,4 @@ ETeamAttitude::Type AChaseAiController::GetTeamAttitudeTowards(const AActor& Oth
 	
 }
 
-bool AChaseAiController::ShouldReactToNoise(AActor* NoiseInstigator) const
-{
-	if (NoiseInstigator)
-	{
-		// Might Have to change to Player I.E.
-		//return NoiseInstigator != nullptr && NoiseInstigator->IsA<APlayerCharacter>();
 
-		if (ActorHasTag(TEXT("NoiseTrap")))
-		{
-			return true;
-		}
-	}
-	
-	return false;
-}
