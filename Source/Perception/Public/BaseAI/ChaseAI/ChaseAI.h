@@ -35,7 +35,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UPawnNoiseEmitterComponent* NoiseEmitter;
 
-	// Initalize Waypoints
+
+	void MoveToWaypoints();
+	
+	// Get the current waypoint
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "True"))
+	int CurrentWaypoint;
+	
+	// Initialize Waypoints
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Waypoints")
 	TArray<AActor*> Waypoints;
 	

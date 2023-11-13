@@ -3,6 +3,7 @@
 
 #include "BaseAI/NoiseTrap/NoiseTrapController.h"
 
+#include "BaseAI/ChaseAI/ChaseAI.h"
 #include "BaseAI/NoiseTrap/NoiseTrapAI.h"
 #include "Perception/AIPerceptionListenerInterface.h"
 #include "BehaviorTree/BehaviorTree.h"
@@ -230,22 +231,18 @@ ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& O
 
 }
 
+void ANoiseTrapController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
+{
+	AChaseAI* CurrentAI = Cast<AChaseAI>(GetPawn());
+
+	if(CurrentAI)
+	{
+		CurrentAI->MoveToWaypoints();
+	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
+}
 
 
 // Gets Pawn class 

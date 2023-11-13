@@ -3,7 +3,10 @@
 
 #include "BaseAI/ChaseAI/ChaseAI.h"
 
+#include "BaseAI/ChaseAI/ChaseAiController.h"
+#include "BaseAI/Waypoints/WayPoints.h"
 #include "Components/PawnNoiseEmitterComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Hearing.h"
 #include "Perception/AISense_Sight.h"
@@ -45,11 +48,43 @@ void AChaseAI::ReportNoise(USoundBase* SoundToPlay, float Volume)
 	
 }
 
+void AChaseAI::MoveToWaypoints()
+{
+
+	AChaseAiController* ControllerAI = Cast<AChaseAiController>(GetController());
+	if(ControllerAI)
+	{
+		if(CurrentWaypoint <= Waypoints.Num())
+		{
+			for (AActor* Waypoint : Waypoints)
+			{
+				AWayPoints* WaypointItr = Cast<AWayPoints>(Waypoint);
+
+				if(WaypointItr)
+				{
+					if(WaypointItr->GetWaypointOrder() == CurrentWaypoint)
+					{
+						ControllerAI->MoveToActor(WaypointItr, 10);
+						CurrentWaypoint++;
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+}
+
 // Called when the game starts or when spawned
 void AChaseAI::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Gets all actors in current level, and adds them to the Waypoints array
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AWayPoints::StaticClass(), Waypoints);
 	
+	// Change to BTTAsk 
+	MoveToWaypoints();
 }
 
 // Called every frame

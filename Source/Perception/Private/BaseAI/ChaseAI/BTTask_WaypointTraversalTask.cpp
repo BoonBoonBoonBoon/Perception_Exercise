@@ -7,6 +7,7 @@
 #include "NavigationSystem.h"
 #include "NavigationPath.h"
 #include "NavigationData.h"
+#include "BaseAI/Waypoints/WaypointTraversal.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Object.h"
 
@@ -22,7 +23,7 @@ EBTNodeResult::Type UBTTask_WaypointTraversalTask::ExecuteTask(UBehaviorTreeComp
 	if (Controller)
 	{
 		// Get the current waypoint actor from the blackboard
-		AActor* CurrentWaypointActor = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(WaypointKey));
+		AWaypointTraversal* CurrentWaypointActor = Cast<AWaypointTraversal>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(WaypointKey));
 		if (CurrentWaypointActor)
 		{
 			// Get the AI's location and the target waypoint's location

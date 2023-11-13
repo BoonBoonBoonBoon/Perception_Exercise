@@ -61,11 +61,11 @@ public:
 	UPROPERTY(EditAnywhere)
 	class ANoiseTrapAI* Agent;
 
-	// Event for when the AI spots the player 
-	/*
-	UFUNCTION(BlueprintCallable, Category="Noise")
-	void MakeNoise(float Loudness);
-	*/
+///////////////////////////////
+
+	// 
+	virtual void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result) override;
+
 
 	
 	//** Perception Components **// 
