@@ -15,8 +15,9 @@ AAIPreyController::AAIPreyController(FObjectInitializer const& ObjectInitializer
 	BTComp = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTreeComponent"));
 	BBComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
 
-	setupInit();
+	TeamId= FGenericTeamId(4);
 	
+	setupInit();
 }
 
 void AAIPreyController::BeginPlay()

@@ -25,7 +25,7 @@ AChaseAiController::AChaseAiController(FObjectInitializer const& ObjectInitializ
 void AChaseAiController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
 {
 	// (Delegate Call) When a pawn enters the sight of current AI, if it has stimulus it will decide on how to react.
-	if (auto const Player = Cast<APerceptionCharacter>(Actor)) // If Actor is Player Class
+	/*if (auto const Player = Cast<APerceptionCharacter>(Actor)) // If Actor is Player Class
 	{
 		if(Stimulus.WasSuccessfullySensed())
 		{
@@ -43,11 +43,34 @@ void AChaseAiController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimu
 				UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can See Player")); // Log that AI sees player
 				GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed()); // Set The boolean Value in BB to true if was sensed.
 		}
+	}*/
+
+	if(GetTeamAttitudeTowards(*Actor))
+	{
+		if(ETeamAttitude::Hostile)
+		{
+			if(Stimulus.WasSuccessfullySensed())
+			{
+				UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can Sense Player")); // Log that AI Senses player
+				GetBlackboardComponent()->SetValueAsBool("SensedPlayer", Stimulus.WasSuccessfullySensed());
+			}
+		
+			if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Hearing>()) // If the Stimulus Type was Noise
+				{
+				UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can Hear Player")); // Log that AI Hears player
+				GetBlackboardComponent()->SetValueAsBool("HeardNoise", Stimulus.WasSuccessfullySensed()); // Set The boolean Value in BB to true if was sensed.
+				}
+			else if(Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Sight>()) // If the Stimulus type was sight
+				{
+				UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can See Player")); // Log that AI sees player
+				GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed()); // Set The boolean Value in BB to true if was sensed.
+				}
+		}
 	}
 
-
-
-
+	
+	//if(ActorHasTag()){}
+	
 	
 	/*if(auto const Prey = Cast<APreyAIPawn>(Actor))
 	{
@@ -74,12 +97,19 @@ void AChaseAiController::OnHearNoise(AActor* ActorInstigator, const FVector& Loc
 	//if();
 }
 
-
+// See BTTask_MoveToNoise
 bool AChaseAiController::ShouldReactToNoise(AActor* NoiseInstigator) const
 {
 	if (NoiseInstigator)
 	{
-		// Might Have to change to Player I.E.
+		if(GetTeamAttitudeTowards(*NoiseInstigator))
+		{
+			if (ETeamAttitude::Neutral || ETeamAttitude::Hostile)
+			{
+				return true;
+			}
+		}
+		/*// Might Have to change to Player I.E.
 		//return NoiseInstigator != nullptr && NoiseInstigator->IsA<APlayerCharacter>();
 		if (auto const Trap = Cast<ANoiseTrapAI>(NoiseInstigator))
 		{
@@ -88,23 +118,36 @@ bool AChaseAiController::ShouldReactToNoise(AActor* NoiseInstigator) const
 		else if (auto const Player = Cast<APerceptionCharacter>(NoiseInstigator))
 		{
 			return true;
-		}
+		}*/
 	}
 	return false;
 }
 
+// See BTTask_MoveToSight
 bool AChaseAiController::ShouldReactToSight(AActor* SightInstigator) const
 {
 	if (SightInstigator)
 	{
-		if (auto const Trap = Cast<ANoiseTrapAI>(SightInstigator))
+		if (GetTeamAttitudeTowards(*SightInstigator))
+		{
+			if (ETeamAttitude::Neutral)
+			{
+				return false;
+				
+			} else if (ETeamAttitude::Hostile)
+			{
+				return true;
+			}
+		}
+
+		/*if (auto const Trap = Cast<ANoiseTrapAI>(SightInstigator))
 		{
 			return false;
 		}
 		if (auto const trap = Cast<APerceptionCharacter>(SightInstigator))
 		{
 			return true;
-		}
+		}*/
 	}
 	return false;
 }
@@ -245,13 +288,16 @@ ETeamAttitude::Type AChaseAiController::GetTeamAttitudeTowards(const AActor& Oth
 	if(fgtiThisBotTeamId == 225) // They are not on a team;
 	{
 		return ETeamAttitude::Neutral;
+		
 	} else if (fgtiThisBotTeamId == fgtiOtherActorTeamId) // They are on the same team
 	{
 		return ETeamAttitude::Friendly;
+		
 	} else if(fgtiThisBotTeamId == 2) // NoiseTrap Team 
 	{
 		// Noise Trap makes sound ???
 		return ETeamAttitude::Neutral;
+		
 	} else // they are on different teams
 	{
 		return ETeamAttitude::Hostile;

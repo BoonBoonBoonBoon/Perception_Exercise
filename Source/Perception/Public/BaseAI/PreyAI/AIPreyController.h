@@ -43,7 +43,8 @@ public:
 	// Pawn on possess	
 	virtual void OnPossess(APawn* InPawn) override;
 
-	
+	UPROPERTY(EditAnywhere)
+	FGenericTeamId TeamId;
 	
 protected:
 	// EQS

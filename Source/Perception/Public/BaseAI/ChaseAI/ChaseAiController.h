@@ -47,6 +47,7 @@ public:
 	//** Detection By Affiliation **// 
 	
 	// Assigns the Controller an id variable
+	UPROPERTY(EditAnywhere)
 	FGenericTeamId TeamId;
 
 	// Returns Team ID

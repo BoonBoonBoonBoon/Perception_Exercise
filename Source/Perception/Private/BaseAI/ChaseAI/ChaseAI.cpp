@@ -54,12 +54,12 @@ void AChaseAI::ReportNoise(USoundBase* SoundToPlay, float Volume)
 	float Speed = ActorVelocity.Size();
 
 	// Log the speed to the output
-	UE_LOG(LogTemp, Warning, TEXT("Current Speed: %f"), Speed);
+//	UE_LOG(LogTemp, Warning, TEXT("Current Speed: %f"), Speed);
 	
 	if(Speed >= 150.f)
 	{
 		// Log the speed to the output
-		UE_LOG(LogTemp, Warning, TEXT("Running!"));
+		//UE_LOG(LogTemp, Warning, TEXT("Running!"));
 
 		//Report we played a sound at a certain volume in a specific location
 		MakeNoise(Volume, this, GetActorLocation());

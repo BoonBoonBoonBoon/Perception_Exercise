@@ -167,7 +167,6 @@ void ANoiseTrapController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 
 ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& Other) const
 {
-
 	
 	// Checks if the actor is a pawn
 	auto OtherPawn = Cast<APawn>(&Other);
@@ -217,13 +216,24 @@ ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& O
 
 	// Determines ThisBot attitude towards the OtherActor (Bot or Player) as either Neutral, Friendly, or Hostile.
 	FGenericTeamId fgtiThisBotTeamId = this->GetGenericTeamId();
-	if(fgtiThisBotTeamId == 225) // They are not on a team;
+	if (fgtiThisBotTeamId == 225) // They are not on a team;
 	{
 		return ETeamAttitude::Neutral;
-	} else if (fgtiThisBotTeamId == fgtiOtherActorTeamId) // They are on the same team
+	}
+	else if (fgtiThisBotTeamId == fgtiOtherActorTeamId) // They are on the same team
 	{
 		return ETeamAttitude::Friendly;
-	} else // they are on different teams
+	}
+	else if (fgtiThisBotTeamId == 3) // Wolf Team 
+	{
+		return ETeamAttitude::Neutral;
+	}
+	else if (fgtiThisBotTeamId == 4) // Deer Team
+	{
+		
+		return ETeamAttitude::Neutral;
+	}
+	else // they are on different teams
 	{
 		return ETeamAttitude::Hostile;
 	}
