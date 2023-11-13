@@ -44,26 +44,27 @@ void AChaseAI::SetupStimulusSource()
 	
 }
 
+// Makes a Noise 
 void AChaseAI::ReportNoise(USoundBase* SoundToPlay, float Volume)
 {
+	// Get the Velocity
+	FVector ActorVelocity = GetVelocity();
 
-	if(this->GetCharacterMovement()->speed >= 10.f)
-	{
-		
-	}
+	// Calculate the speed as the magnitude of the velocity vector
+	float Speed = ActorVelocity.Size();
 
-
+	// Log the speed to the output
+	UE_LOG(LogTemp, Warning, TEXT("Current Speed: %f"), Speed);
 	
-	/*if(this->GetCharacterMovement()->IsMovingOnGround())
+	if(Speed >= 150.f)
 	{
-		if(this->GetCharacterMovement()->IsMovementInProgress())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("isMoving")); 
-		} else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("NotMoving")); 
-		}
-	}*/
+		// Log the speed to the output
+		UE_LOG(LogTemp, Warning, TEXT("Running!"));
+
+		//Report we played a sound at a certain volume in a specific location
+		MakeNoise(Volume, this, GetActorLocation());
+	}
+	
 }
 
 void AChaseAI::MoveToWaypoints()
@@ -109,7 +110,8 @@ void AChaseAI::BeginPlay()
 void AChaseAI::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	ReportNoise(NULL,NULL);
+	// Makes a noise
+	ReportNoise(NULL,1);
 }
 
 // Called to bind functionality to input

@@ -194,7 +194,7 @@ void AChaseAiController::BeginPlay()
 
 ETeamAttitude::Type AChaseAiController::GetTeamAttitudeTowards(const AActor& Other) const
 {
-		// Checks if the actor is a pawn
+	// Checks if the actor is a pawn
 	auto OtherPawn = Cast<APawn>(&Other);
 	if(OtherPawn == nullptr)
 	{
@@ -204,7 +204,7 @@ ETeamAttitude::Type AChaseAiController::GetTeamAttitudeTowards(const AActor& Oth
 	// Check if Actor (Bot or Player) implements IGenericTeamAgentInterface.
 	auto igtaiActorBot = Cast<IGenericTeamAgentInterface>(OtherPawn->GetController());
 	auto igtaiActorPlayer = Cast<IGenericTeamAgentInterface>(&Other);
-	if(igtaiActorBot == nullptr && igtaiActorPlayer == nullptr)
+	if(igtaiActorBot == nullptr && igtaiActorPlayer == nullptr) // if Bot is 225
 	{
 		return ETeamAttitude::Neutral;
 	}

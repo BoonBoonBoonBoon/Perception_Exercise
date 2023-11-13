@@ -88,22 +88,30 @@ void APreyAIPawn::SetupStimulusSource()
 
 void APreyAIPawn::ReportNoise(USoundBase* SoundToPlay, float Volume)
 {
+
+	
+
+
+
+
+	
+	
 	// report a noise
-	if(SoundToPlay)
+	/*if(SoundToPlay)
 	{
 		// Plays the actual sound
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(),SoundToPlay, GetActorLocation(), Volume);
 
 		//Report we played a sound at a certain volume in a specific location
 		MakeNoise(Volume, this, GetActorLocation());
-	}
+	}*/
 }
 
 // Called every frame
 void APreyAIPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	ReportNoise(NULL, 1);
 	//SetupSphere();
 
 	
