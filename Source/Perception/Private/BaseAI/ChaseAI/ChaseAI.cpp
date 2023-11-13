@@ -6,6 +6,7 @@
 #include "BaseAI/ChaseAI/ChaseAiController.h"
 #include "BaseAI/Waypoints/WayPoints.h"
 #include "Components/PawnNoiseEmitterComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Hearing.h"
@@ -45,7 +46,24 @@ void AChaseAI::SetupStimulusSource()
 
 void AChaseAI::ReportNoise(USoundBase* SoundToPlay, float Volume)
 {
+
+	if(this->GetCharacterMovement()->speed >= 10.f)
+	{
+		
+	}
+
+
 	
+	/*if(this->GetCharacterMovement()->IsMovingOnGround())
+	{
+		if(this->GetCharacterMovement()->IsMovementInProgress())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("isMoving")); 
+		} else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("NotMoving")); 
+		}
+	}*/
 }
 
 void AChaseAI::MoveToWaypoints()
@@ -91,7 +109,7 @@ void AChaseAI::BeginPlay()
 void AChaseAI::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	ReportNoise(NULL,NULL);
 }
 
 // Called to bind functionality to input
