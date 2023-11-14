@@ -63,6 +63,8 @@ APerceptionCharacter::APerceptionCharacter()
 	// Noise Emitter to make sound 
 	NoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("PawnNoiseEmitter"));
 
+
+	
 	// Assigns the character to the team of 1
 	TeamId = FGenericTeamId(1);
 	VolumeOutput = 1.f;
@@ -132,19 +134,18 @@ void APerceptionCharacter::StopCrouch()
 	}*/
 }
 
-void APerceptionCharacter::OnBeginOverlap(UPrimitiveComponent* OverlapComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void APerceptionCharacter::Health()
 {
-	if (OtherActor)
+	/*if(Health <= 0)
 	{
-		AAIBase* Ref = Cast<AAIBase>(OtherActor);
-		if(Ref)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Hit"));
-		}
-	}
+		DestroyActor
+	}*/
+}
 
-	// Log the value of bCrouching
-	UE_LOG(LogTemp, Warning, TEXT("bCrouching: %s"), bCrouching ? TEXT("True") : TEXT("False"));
+void APerceptionCharacter::OnOverlapBegin(UPrimitiveComponent* OverlapComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	
+	UE_LOG(LogTemp, Warning, TEXT("Hit"))
 	
 }
 
@@ -167,7 +168,11 @@ void APerceptionCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	Collision->OnComponentBeginOverlap.AddDynamic(this, &APerceptionCharacter::OnBeginOverlap);
+
+	// Set up capsule component (replace with your actual collision component)
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APerceptionCharacter::OnOverlapBegin);
+	
+	
 }
 
 //////////////////////////////////////////////////////////////////////////

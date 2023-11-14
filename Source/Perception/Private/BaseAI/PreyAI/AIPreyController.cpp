@@ -99,20 +99,20 @@ void AAIPreyController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 		{
 			if (Stimulus.WasSuccessfullySensed())
 			{
-				UE_LOG(LogTemp, Warning, TEXT("PreyAI - Can Sense Something")); // Log that AI Senses player
+				//UE_LOG(LogTemp, Warning, TEXT("PreyAI - Can Sense Something")); // Log that AI Senses player
 				//GetBlackboardComponent()->SetValueAsBool("SensedPlayer", Stimulus.WasSuccessfullySensed());
 			}
 
 			if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Hearing>()) // If the Stimulus Type was Noise
 			{
 				UE_LOG(LogTemp, Warning, TEXT("PreyAI - Can Hear Something")); // Log that AI Hears player
-				GetBlackboardComponent()->SetValueAsBool("HearPredator", Stimulus.WasSuccessfullySensed());
+				//GetBlackboardComponent()->SetValueAsBool("HearPredator", Stimulus.WasSuccessfullySensed());
 				// Set The boolean Value in BB to true if was sensed.
 			}
 			 if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Sight>()) // If the Stimulus type was sight
 			{
 				UE_LOG(LogTemp, Warning, TEXT("PreyAI - Can See Something")); // Log that AI sees player
-				GetBlackboardComponent()->SetValueAsBool("SeePredator", Stimulus.WasSuccessfullySensed());
+				//GetBlackboardComponent()->SetValueAsBool("SeePredator", Stimulus.WasSuccessfullySensed());
 				// Set The boolean Value in BB to true if was sensed.
 			}
 		}
