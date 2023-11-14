@@ -23,13 +23,6 @@ class PERCEPTION_API AAIPreyController : public AAIController
 	GENERATED_BODY()
 
 public:
-
-	//////// TO DO
-	// Make Custom Debugger
-	// Make custom senses 
-	// 
-	
-	
 	
 	AAIPreyController(FObjectInitializer const& ObjectInitializer);
 
@@ -45,6 +38,24 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	FGenericTeamId TeamId;
+	
+	// Returns Team ID
+	virtual FGenericTeamId GetGenericTeamId() const override {return TeamId;};
+
+	// Assign Teams and Reactions
+	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
+	
+	// Boolean used to check if actor should react (Check BTTask MoveToNoise)
+	bool ShouldReactToNoise(AActor* NoiseInstigator) const;
+
+	// Boolean used to check if actor should react (Check BTTask MoveToSight
+	bool ShouldReactToSight(AActor* SightInstigator) const;
+
+
+
+
+
+
 	
 protected:
 	// EQS
@@ -91,9 +102,7 @@ protected:
 public:
 
 	// Assigns a new blackboard key
-	const FName BBPredatorKey = FName("Predator");
-
-	const FName BBHearPlayerKey = FName("HearPlayer");
+	const FName BBSeePredatorKey = FName("SeePredator");
 
 	const FName BBHearPredatorKey = FName("HearPredator");
 

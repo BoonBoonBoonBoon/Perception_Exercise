@@ -27,7 +27,7 @@ EBTNodeResult::Type UBTTask_MoveToSight::ExecuteTask(UBehaviorTreeComponent& Own
 		{
 			// Array of AActor
 			TArray<AActor*> PercivedActors;
-			// The perception component gets all current actors that is has heard.
+			// The perception component gets all current actors that is has seen.
 			PerceptionComponent->GetCurrentlyPerceivedActors(UAISenseConfig_Sight::StaticClass(), PercivedActors);
 
 			for (AActor* PercivedActor : PercivedActors)
@@ -35,7 +35,7 @@ EBTNodeResult::Type UBTTask_MoveToSight::ExecuteTask(UBehaviorTreeComponent& Own
 				//  may want to implement different logic here to determine which noise to react to
 				if (Controller->ShouldReactToSight(PercivedActor))
 				{
-					// Retrieve information about the perceived noise
+					// Retrieve information about the perceived sight 
 					FVector SightLocation = PercivedActor->GetActorLocation();
 
 					AChaseAI* ChaseAi = Cast<AChaseAI>(Controller->GetPawn());

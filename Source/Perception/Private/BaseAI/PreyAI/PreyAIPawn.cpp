@@ -24,15 +24,7 @@ APreyAIPawn::APreyAIPawn()
 	PrimaryActorTick.bCanEverTick = true;
 	GetCharacterMovement()->MaxWalkSpeed = 300;
 
-	// Radius Detection 
-	RadiusSphere = CreateDefaultSubobject<USphereComponent>("RadiusSphere");
-	RadiusSphere->SetupAttachment(RootComponent);
-	RadiusSphere->SetSphereRadius(1000.f);
-
 	NoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("PawnNoiseEmitter"));
-
-	RadiusSphere->OnComponentBeginOverlap.AddDynamic(this, &APreyAIPawn::OnOverlapBegin);
-	//RadiusSphere->OnComponentEndOverlap.AddDynamic(this, &APreyAIPawn::OnOverlapEnd);
 }
 
 void APreyAIPawn::TestDistFunc()
@@ -48,18 +40,18 @@ void APreyAIPawn::TestDistFunc()
 	float DistanceToOtherAI = FVector::Dist(CurrentAILoc, OtherAILocation);
 	UE_LOG(LogTemp, Warning, TEXT("Distance to Other AI: %f"), DistanceToOtherAI);
 	*/
-	
 }
 
 void APreyAIPawn::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-                                 UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                 UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+                                 const FHitResult& SweepResult)
 {
 	// Maybe learn team id first...
-	
 }
 
 void APreyAIPawn::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                               UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+                               const FHitResult& SweepResult)
 {
 }
 
@@ -73,29 +65,34 @@ void APreyAIPawn::BeginPlay()
 
 void APreyAIPawn::SetupStimulusSource()
 {
-
 	// Give Specific Tag
-	
+
 	StimuliSourcePrey = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("Stimulus Source"));
-	if(StimuliSourcePrey)
+	if (StimuliSourcePrey)
 	{
 		StimuliSourcePrey->RegisterForSense(TSubclassOf<UAISense_Sight>());
 		StimuliSourcePrey->RegisterForSense(TSubclassOf<UAISense_Hearing>());
 		StimuliSourcePrey->RegisterWithPerceptionSystem();
 	}
-	
 }
 
 void APreyAIPawn::ReportNoise(USoundBase* SoundToPlay, float Volume)
 {
+	// Get the Velocity
+	FVector ActorVelocity = GetVelocity();
 
-	
+	// Calculate the speed as the magnitude of the velocity vector
+	float Speed = ActorVelocity.Size();
 
+	if (Speed >= 150.f)
+	{
+		// Log the speed to the output
+		//UE_LOG(LogTemp, Warning, TEXT("Running!"));
 
+		//Report we played a sound at a certain volume in a specific location
+		MakeNoise(Volume, this, GetActorLocation());
+	}
 
-
-	
-	
 	// report a noise
 	/*if(SoundToPlay)
 	{
@@ -111,22 +108,18 @@ void APreyAIPawn::ReportNoise(USoundBase* SoundToPlay, float Volume)
 void APreyAIPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	// Makes a noise
 	ReportNoise(NULL, 1);
-	//SetupSphere();
-
-	
 }
 
 // Called to bind functionality to input
 void APreyAIPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
 void APreyAIPawn::SetupSphere()
 {
-
 	// Array that contains the hit results
 	TArray<FHitResult> HitResults;
 
@@ -144,15 +137,15 @@ void APreyAIPawn::SetupSphere()
 	FCollisionShape CollisionShape;
 	CollisionShape.ShapeType = ECollisionShape::Sphere;
 	CollisionShape.SetSphere(SphereRadius + 800);
-	
+
 	bool bHit = GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat(), ECC, CollisionShape);
-	
+
 	FVector CenterOfSphere = ((EndLocation - StartLocation) / 2) + StartLocation;
- 
+
 	/*Draw the sphere in the viewport*/
 	DrawDebugSphere(GetWorld(), CenterOfSphere, CollisionShape.GetSphereRadius(), Segements, FColor::Blue, false);
-	
-	if(bHit)
+
+	if (bHit)
 	{
 		//DrawDebugBox()
 	}

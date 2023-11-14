@@ -19,9 +19,7 @@ public:
 	void TestDistFunc();
 
 
-	// Radius for enemies nearby
-	UPROPERTY(EditAnywhere,Category=Tracers)
-	class USphereComponent* RadiusSphere;
+
 
 	UFUNCTION( )
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, 

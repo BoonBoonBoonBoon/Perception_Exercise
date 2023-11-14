@@ -60,17 +60,15 @@ void AChaseAiController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimu
 				UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can Hear Player")); // Log that AI Hears player
 				GetBlackboardComponent()->SetValueAsBool("HeardNoise", Stimulus.WasSuccessfullySensed()); // Set The boolean Value in BB to true if was sensed.
 				}
-			else if(Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Sight>()) // If the Stimulus type was sight
+			if(Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Sight>()) // If the Stimulus type was sight
 				{
 				UE_LOG(LogTemp, Warning, TEXT("ChaseAI - Can See Player")); // Log that AI sees player
 				GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed()); // Set The boolean Value in BB to true if was sensed.
 				}
 		}
 	}
-
 	
 	//if(ActorHasTag()){}
-	
 	
 	/*if(auto const Prey = Cast<APreyAIPawn>(Actor))
 	{
@@ -130,13 +128,16 @@ bool AChaseAiController::ShouldReactToSight(AActor* SightInstigator) const
 	{
 		if (GetTeamAttitudeTowards(*SightInstigator))
 		{
+			if (ETeamAttitude::Hostile)
+			{
+				return true;
+			}
+			
+		} else if (GetTeamAttitudeTowards(*SightInstigator))
+		{
 			if (ETeamAttitude::Neutral)
 			{
 				return false;
-				
-			} else if (ETeamAttitude::Hostile)
-			{
-				return true;
 			}
 		}
 
