@@ -67,7 +67,7 @@ void ANoiseTrapController::setupInit()
 		Config_Sight->SightRadius = 500.f;
 		Config_Sight->LoseSightRadius = Config_Sight->SightRadius + 200.f;
 		Config_Sight->PeripheralVisionAngleDegrees = 180.f;
-		Config_Sight->SetMaxAge(0.f);
+		Config_Sight->SetMaxAge(1.f);
 
 		Config_Sight->DetectionByAffiliation.bDetectEnemies = true;
 		Config_Sight->DetectionByAffiliation.bDetectFriendlies = true;
@@ -79,7 +79,7 @@ void ANoiseTrapController::setupInit()
 		if (Config_Hearing)
 		{
 			Config_Hearing->HearingRange = 800.f;
-			Config_Hearing->SetMaxAge(0.f);
+			Config_Hearing->SetMaxAge(3.f);
 			Config_Hearing->DetectionByAffiliation.bDetectEnemies = true;
 			Config_Hearing->DetectionByAffiliation.bDetectFriendlies = true;
 			Config_Hearing->DetectionByAffiliation.bDetectNeutrals = true;
@@ -121,28 +121,89 @@ void ANoiseTrapController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 	// (Delegate Call) When a pawn enters the sight of current AI, if it has stimulus it will decide on how to react.
 	if (auto const Player = Cast<APerceptionCharacter>(Actor))
 	{
-		if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Hearing>())
+		if (GetTeamAttitudeTowards(*Player))
 		{
-			// Tells Blackboard that we want to make a new boolean with the key name CanSeePrey, 
-			GetBlackboardComponent()->SetValueAsBool("CanSeePredator", Stimulus.WasSuccessfullySensed());
-			// OR, instead of a boolean we Assign a specific actor as a key (In this case a BBPrey).
-			Blackboard->SetValueAsObject(BBHearPlayerKey, Actor);
+			if (ETeamAttitude::Hostile)
+			{
+				if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Hearing>())
+				{
+					// Tells Blackboard that we want to make a new boolean with the key name CanSeePrey, 
+					GetBlackboardComponent()->SetValueAsBool("CanHearPlayer", Stimulus.WasSuccessfullySensed());
+					// OR, instead of a boolean we Assign a specific actor as a key (In this case a BBPrey).
+					Blackboard->SetValueAsObject(BBHearPlayerKey, Actor);
 
-			// FirstTime Making Noise
-			if (bFirstNoise)
-			{
-				Actor->MakeNoise(3.f, Agent, Actor->GetActorLocation());
-				UE_LOG(LogTemp, Warning, TEXT("MakeNoise called for the first time, with (Hearing) loudness 3.0f at location %s"), *Actor->GetActorLocation().ToString());
-				bFirstNoise = false;
-				bCanMakeNoise = true;
-			} else if(bCanMakeNoise && !bFirstNoise)
-			{
-				bCanMakeNoise = false;
-				Actor->MakeNoise(3.f, Agent, Actor->GetActorLocation());
-				UE_LOG(LogTemp, Warning, TEXT("MakeNoise called for the Second time, with (Hearing) loudness 3.0f at location %s"), *Actor->GetActorLocation().ToString());
-				GetWorldTimerManager().SetTimer(TimeToSenseHandle, this, &ANoiseTrapController::TimeToSense, 1.f, true);
+					// FirstTime Making Noise
+					if (bFirstNoise)
+					{
+						Actor->MakeNoise(3.f, Agent, Actor->GetActorLocation());
+						UE_LOG(LogTemp, Warning,
+						       TEXT("MakeNoise called for the first time, with (Hearing) loudness 3.0f at location %s"),
+						       *Actor->GetActorLocation().ToString());
+						bFirstNoise = false;
+						bCanMakeNoise = true;
+					}
+					else if (bCanMakeNoise && !bFirstNoise)
+					{
+						bCanMakeNoise = false;
+						Actor->MakeNoise(3.f, Agent, Actor->GetActorLocation());
+						UE_LOG(LogTemp, Warning,
+						       TEXT("MakeNoise called for the Second time, with (Hearing) loudness 3.0f at location %s"
+						       ), *Actor->GetActorLocation().ToString());
+						GetWorldTimerManager().SetTimer(TimeToSenseHandle, this, &ANoiseTrapController::TimeToSense,
+						                                1.f, true);
+					}
+				} else if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Sight>())
+				{
+					GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed());
+					Blackboard->SetValueAsObject(BBSeePlayerKey, Actor);
+					
+					// FirstTime Making Noise
+					if (bFirstNoise)
+					{
+						Actor->MakeNoise(3.f, Agent, Actor->GetActorLocation());
+						UE_LOG(LogTemp, Warning,
+							   TEXT("MakeNoise called for the first time, with (Hearing) loudness 3.0f at location %s"),
+							   *Actor->GetActorLocation().ToString());
+						bFirstNoise = false;
+						bCanMakeNoise = true;
+					} else if (bCanMakeNoise && !bFirstNoise)
+					{
+						bCanMakeNoise = false;
+						Actor->MakeNoise(3.f, Agent, Actor->GetActorLocation());
+						UE_LOG(LogTemp, Warning,
+							   TEXT("MakeNoise called for the Second time, with (Hearing) loudness 3.0f at location %s"
+							   ), *Actor->GetActorLocation().ToString());
+						GetWorldTimerManager().SetTimer(TimeToSenseHandle, this, &ANoiseTrapController::TimeToSense,
+														1.f, true);
+					}
+				}
 			}
 		}
+		/*if (auto const Player = Cast<APerceptionCharacter>(Actor))
+		{
+			if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Hearing>())
+			{
+				// Tells Blackboard that we want to make a new boolean with the key name CanSeePrey, 
+				GetBlackboardComponent()->SetValueAsBool("CanSeePredator", Stimulus.WasSuccessfullySensed());
+				// OR, instead of a boolean we Assign a specific actor as a key (In this case a BBPrey).
+				Blackboard->SetValueAsObject(BBHearPlayerKey, Actor);
+
+				// FirstTime Making Noise
+				if (bFirstNoise)
+				{
+					Actor->MakeNoise(3.f, Agent, Actor->GetActorLocation());
+					UE_LOG(LogTemp, Warning, TEXT("MakeNoise called for the first time, with (Hearing) loudness 3.0f at location %s"), *Actor->GetActorLocation().ToString());
+					bFirstNoise = false;
+					bCanMakeNoise = true;
+				} else if(bCanMakeNoise && !bFirstNoise)
+				{
+					bCanMakeNoise = false;
+					Actor->MakeNoise(3.f, Agent, Actor->GetActorLocation());
+					UE_LOG(LogTemp, Warning, TEXT("MakeNoise called for the Second time, with (Hearing) loudness 3.0f at location %s"), *Actor->GetActorLocation().ToString());
+					GetWorldTimerManager().SetTimer(TimeToSenseHandle, this, &ANoiseTrapController::TimeToSense, 1.f, true);
+				}
+			}*/
+		
 		/*else if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Sight>())
 		{
 			GetBlackboardComponent()->SetValueAsBool("CanSeePredator", Stimulus.WasSuccessfullySensed());

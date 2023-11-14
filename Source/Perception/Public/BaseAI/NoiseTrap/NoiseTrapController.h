@@ -92,8 +92,8 @@ public:
 	TObjectPtr<UAISenseConfig_Sight> Config_Sight;
 
 	// Blackboard key for hearing the player 
-	const FName BBHearPlayerKey = FName("HearPlayer");
+	const FName BBHearPlayerKey = FName("CanHearPlayer");
 	
 	// Blackboard key for seeing the player
-	const FName BBSeePlayerKey = FName("SeePlayer");
+	const FName BBSeePlayerKey = FName("CanSeePlayer");
 };
