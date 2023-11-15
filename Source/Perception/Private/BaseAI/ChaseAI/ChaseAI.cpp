@@ -41,7 +41,6 @@ void AChaseAI::SetupStimulusSource()
 		StimuliSourcePredator->RegisterForSense(TSubclassOf<UAISense_Hearing>());
 		StimuliSourcePredator->RegisterWithPerceptionSystem();
 	}
-	
 }
 
 // Makes a Noise 
