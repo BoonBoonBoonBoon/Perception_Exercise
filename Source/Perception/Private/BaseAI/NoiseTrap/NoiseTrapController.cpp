@@ -179,52 +179,9 @@ void ANoiseTrapController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 				}
 			}
 		}
-		/*if (auto const Player = Cast<APerceptionCharacter>(Actor))
-		{
-			if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Hearing>())
-			{
-				// Tells Blackboard that we want to make a new boolean with the key name CanSeePrey, 
-				GetBlackboardComponent()->SetValueAsBool("CanSeePredator", Stimulus.WasSuccessfullySensed());
-				// OR, instead of a boolean we Assign a specific actor as a key (In this case a BBPrey).
-				Blackboard->SetValueAsObject(BBHearPlayerKey, Actor);
-
-				// FirstTime Making Noise
-				if (bFirstNoise)
-				{
-					Actor->MakeNoise(3.f, Agent, Actor->GetActorLocation());
-					UE_LOG(LogTemp, Warning, TEXT("MakeNoise called for the first time, with (Hearing) loudness 3.0f at location %s"), *Actor->GetActorLocation().ToString());
-					bFirstNoise = false;
-					bCanMakeNoise = true;
-				} else if(bCanMakeNoise && !bFirstNoise)
-				{
-					bCanMakeNoise = false;
-					Actor->MakeNoise(3.f, Agent, Actor->GetActorLocation());
-					UE_LOG(LogTemp, Warning, TEXT("MakeNoise called for the Second time, with (Hearing) loudness 3.0f at location %s"), *Actor->GetActorLocation().ToString());
-					GetWorldTimerManager().SetTimer(TimeToSenseHandle, this, &ANoiseTrapController::TimeToSense, 1.f, true);
-				}
-			}*/
 		
-		/*else if (Stimulus.Type == UAISense::GetSenseID<UAISenseConfig_Sight>())
-		{
-			GetBlackboardComponent()->SetValueAsBool("CanSeePredator", Stimulus.WasSuccessfullySensed());
-			Blackboard->SetValueAsObject(BBSeePlayerKey, Actor);
-
-			// First Time Making Noise
-			if (bFirstNoise)
-			{
-				Actor->MakeNoise(3.f, Agent, Actor->GetActorLocation());
-				bFirstNoise = false;
-			}
-		}*/
 	}
 }
-
-//UE_LOG(LogTemp, Warning, TEXT("TeamId of Agent: %d"), TeamId.GetId());
-//UE_LOG(LogTemp, Warning, TEXT("ALERT! - NOISETRAP CAN SEE PLAYER!!"))
-//Agent->MakeNoise(3.f, Agent, Agent->GetActorLocation());
-// Log a message indicating that MakeNoise has been called
-//UE_LOG(LogTemp, Warning, TEXT("MakeNoise called with (Sight) loudness 3.0f at location %s"),
-// *Actor->GetActorLocation().ToString());
 
 ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& Other) const
 {
@@ -310,9 +267,6 @@ void ANoiseTrapController::OnMoveCompleted(FAIRequestID RequestID, const FPathFo
 	{
 		CurrentAI->MoveToWaypoints();
 	}
-
-
-	
 }
 
 
@@ -333,28 +287,3 @@ if (CheckSelf)
 }*/
 
 
-/*
-ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& Other) const
-{
-	//return Super::GetTeamAttitudeTowards(Other);
-	//UE_LOG(LogTemp, Warning, TEXT("TeamId of Other Actor: %d"), OtherActorTeamId.GetId());
-
-
-	// check if Actor is a pawn
-	const APawn* OtherPawn = Cast<APawn>(&Other);
-	if (OtherPawn == nullptr)
-	{
-		return ETeamAttitude::Neutral;
-	}
-
-	// Check if Actor implements GenericTeamAgentInterface (If its a bot or player)
-	auto PlayerIT = Cast<IGenericTeamAgentInterface>(&Other);
-	class IGenericTeamAgentInterface* BotIT = Cast<IGenericTeamAgentInterface>(OtherPawn->GetController());
-	if (BotIT == nullptr && PlayerIT == nullptr)
-	{
-		return ETeamAttitude::Neutral;
-	}
-
-	return {};
-}
-*/
