@@ -255,8 +255,6 @@ ETeamAttitude::Type ANoiseTrapController::GetTeamAttitudeTowards(const AActor& O
 	{
 		return ETeamAttitude::Hostile;
 	}
-	
-
 }
 
 void ANoiseTrapController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
