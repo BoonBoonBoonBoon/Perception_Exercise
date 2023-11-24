@@ -44,6 +44,8 @@ class APerceptionCharacter : public ACharacter, public IGenericTeamAgentInterfac
 	USphereComponent* Collision;
 public:
 	APerceptionCharacter();
+	// Creates Sphere
+
 
 	/***  Perception Components   ***/
 	
@@ -80,10 +82,10 @@ public:
 	void Health();
 protected:
 
-	void OnOverlapBegin(UPrimitiveComponent* OverlapComponent, 
-	AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
-	bool bFromSweep, const FHitResult& SweepResult);
-
+	// Overlap Function
+	UFUNCTION()
+	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);

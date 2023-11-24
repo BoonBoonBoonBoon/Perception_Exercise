@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "BaseAI/AIBase.h"
+#include "BaseAI/ChaseAI/ChaseAI.h"
 #include "Components/PawnNoiseEmitterComponent.h"
 #include "DSP/Osc.h"
 #include "Kismet/GameplayStatics.h"
@@ -142,11 +143,18 @@ void APerceptionCharacter::Health()
 	}*/
 }
 
-void APerceptionCharacter::OnOverlapBegin(UPrimitiveComponent* OverlapComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void APerceptionCharacter::OnOverlapBegin(UPrimitiveComponent* OverlapComponent, AActor* OtherActor,
+                                          UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+                                          const FHitResult& SweepResult)
 {
 	
-	UE_LOG(LogTemp, Warning, TEXT("Hit"))
-	
+	AChaseAI* ChaseAI = Cast<AChaseAI>(OtherActor);
+	if (ChaseAI)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Hit detected with AChaseAI"));
+		// Destroy the actor
+		Destroy();
+	}
 }
 
 void APerceptionCharacter::BeginPlay()
@@ -170,7 +178,7 @@ void APerceptionCharacter::Tick(float DeltaSeconds)
 
 
 	// Set up capsule component (replace with your actual collision component)
-	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APerceptionCharacter::OnOverlapBegin);
+	Collision->OnComponentBeginOverlap.AddDynamic(this, &APerceptionCharacter::OnOverlapBegin);
 	
 	
 }
